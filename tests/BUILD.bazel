@@ -1,0 +1,8 @@
+# Copyright (c) 2024 Morgan Wajda-Levie
+
+# placeholder for testing github workflow
+sh_test(
+    name = "always_succeed",
+    size = "small",
+    srcs = ["true.sh"],
+)
