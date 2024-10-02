@@ -12,7 +12,7 @@ sh_test(
 nasm_test(
     name = "nasm_binary_test",
     size = "small",
-    srcs = ["always_succeed_main.asm"],
+    src = "always_succeed_main.asm",
 )
 
 cc_test(

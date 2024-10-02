@@ -2,15 +2,17 @@
 
 """Rule for nasm test targets."""
 
-def _nasm_test_impl(ctx):
-    """Implement nasm test."""
+load(":library.bzl", "nasm_library")
 
+def nasm_test(name, src, size=None, **kwargs):
+    nasm_library(
+        name = name + "_lib",
+        src = src,
+    )
 
-def nasm_test(name, srcs, size=None, **kwargs):
-    native.genrule(
-        name = "create_empty_file",
-        srcs = srcs,
-        outs = ["tmp"],
-        cmd = "echo 1 > $@",
-        **kwargs,
+    native.cc_test(
+        name = name,
+        size = size,
+        srcs = [":%s_lib"%name],
+        **kwargs
     )
