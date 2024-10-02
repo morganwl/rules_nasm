@@ -1,6 +1,6 @@
 # Copyright (c) 2024 Morgan Wajda-Levie.
 
-load("@rules_nasm//nasm:defs.bzl", "nasm_test", "nasm_library")
+load("@rules_nasm//nasm:defs.bzl", "nasm_test", "nasm_library", "nasm_binary")
 
 # placeholder for testing github workflow
 sh_test(
@@ -10,7 +10,7 @@ sh_test(
 )
 
 nasm_test(
-    name = "nasm_binary_test",
+    name = "nasm_test_test",
     size = "small",
     src = "always_succeed_main.asm",
 )
@@ -25,4 +25,15 @@ cc_test(
 nasm_library(
     name = "nasm_component",
     src = "nasm_component_test.asm",
+)
+
+sh_test(
+    name = "nasm_binary_test",
+    size = "small",
+    srcs = [":nasm_executable"],
+)
+
+nasm_binary(
+    name = "nasm_executable",
+    src = "always_succeed_main.asm",
 )
