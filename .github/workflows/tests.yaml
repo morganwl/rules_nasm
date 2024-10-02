@@ -22,5 +22,5 @@ jobs:
           USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
           USE_BZLMOD: ${{ matrix.bzlmod }}
         run:
-          bazel test //...
+          bazel test //tests/...
 
