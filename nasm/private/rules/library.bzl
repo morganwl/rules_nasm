@@ -9,13 +9,16 @@ def _nasm_library_impl(ctx):
     src = ctx.file.src
     inputs = depset([src])
     out = ctx.actions.declare_file(ctx.label.name + '.o')
+
+    nasm_info = ctx.toolchains["//nasm:toolchain_type"]
+
     args = ctx.actions.args()
-    args.add("-felf64")
+    args.add_all(nasm_info.args)
     args.add("-o", out)
     args.add(src)
     ctx.actions.run(
         mnemonic = "NasmAssemble",
-        executable = "nasm",
+        executable = nasm_info.compiler_path,
         arguments = [args],
         inputs = inputs,
         outputs = [out],
@@ -29,6 +32,7 @@ _nasm_library_inner = rule(
     attrs = {
         "src": attr.label(allow_single_file = [".asm"]),
     },
+    toolchains = ["//nasm:toolchain_type"],
 )
 
 def nasm_library(name, src, **kwargs):

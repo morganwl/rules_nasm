@@ -1,0 +1,15 @@
+toolchain_type(name = "toolchain_type")
+
+load("nasm_toolchain.bzl", "nasm_toolchain")
+
+nasm_toolchain(
+    name = "nasm",
+    compiler_path = "/usr/bin/nasm",
+    args = ["-felf64"],
+)
+
+toolchain(
+    name = "nasm_linux_toolchain",
+    toolchain = ":nasm",
+    toolchain_type = ":toolchain_type",
+)
