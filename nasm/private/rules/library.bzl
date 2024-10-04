@@ -18,7 +18,7 @@ def _nasm_library_impl(ctx):
     args.add(src)
     ctx.actions.run(
         mnemonic = "NasmAssemble",
-        executable = nasm_info.compiler_path,
+        executable = nasm_info.compiler,
         arguments = [args],
         inputs = inputs,
         outputs = [out],
