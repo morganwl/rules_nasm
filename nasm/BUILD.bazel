@@ -30,7 +30,7 @@ nasm_toolchain(
 
 nasm_toolchain(
     name = "nasm_macosx",
-    target = "@nasm_macosx//:nasm",
+    target = "@nasm_macosx//:compiler",
     exec_compatible_with = [
         "@platforms//os:osx",
     ],

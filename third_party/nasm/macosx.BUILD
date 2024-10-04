@@ -8,9 +8,10 @@ filegroup(
 )
 
 genrule(
-    name = "nasm",
+    name = "compiler",
     srcs = [":nasm_file"],
-    outs = ["nasm"],
+    outs = ["bin/nasm"],
     executable = True,
     cmd = "cp $< $@",
+    visibility = ["//visibility:public"],
 )

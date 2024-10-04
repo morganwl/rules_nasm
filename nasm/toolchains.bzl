@@ -14,7 +14,7 @@ def nasm_fetch_toolchains_macosx(name):
         name = name,
         build_file = "//third_party/nasm:macosx.BUILD",
         url = "https://www.nasm.us/pub/nasm/releasebuilds/2.16.03/macosx/nasm-2.16.03-macosx.zip",
-        strip_prefix = "nasm-2.16.03-macosx",
+        strip_prefix = "nasm-2.16.03",
         sha256 = "0d29bcd8a5fc617333f4549c7c1f93d1866a4a0915c40359e0a8585bb1a5aa75",
     )
 
