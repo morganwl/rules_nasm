@@ -8,7 +8,7 @@ nasm_test(
     size = "small",
     src = select({
         "@platforms//os:linux": "always_succeed_main.asm",
-        "@platforms//os:osx": "always_succeed_main_mac.asm",
+        "@platforms//os:macos": "always_succeed_main_mac.asm",
     }),
 )
 
@@ -23,7 +23,7 @@ nasm_library(
     name = "nasm_component",
     src = select({
         "@platforms//os:linux": "nasm_component_test.asm",
-        "@platforms//os:osx": "nasm_component_test_mac.asm",
+        "@platforms//os:macos": "nasm_component_test_mac.asm",
     }),
 )
 
@@ -32,7 +32,7 @@ sh_test(
     size = "small",
     srcs = select({
         "@platforms//os:linux": [":nasm_executable"],
-        "@platforms//os:osx": [":nasm_executable_mac"],
+        "@platforms//os:macos": [":nasm_executable_mac"],
     })
 )
 
@@ -48,6 +48,6 @@ nasm_binary(
     name = "nasm_executable_mac",
     src = "always_succeed_main_mac.asm",
     target_compatible_with = [
-        "@platforms//os:osx",
+        "@platforms//os:macos",
     ],
 )
