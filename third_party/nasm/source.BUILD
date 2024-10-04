@@ -1,9 +1,8 @@
 load("@rules_foreign_cc//foreign_cc:defs.bzl", "configure_make")
-load("@bazel_skylib//rules:select_file.bzl", "select_file")
 
 filegroup(
     name = "nasm_src",
-    srcs = glob(include=["**/*"], exclude=["BUILD*"]),
+    srcs = glob(include=["**/*"], exclude=["*.BUILD"]),
 )
 
 configure_make(
