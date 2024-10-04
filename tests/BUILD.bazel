@@ -21,10 +21,10 @@ cc_test(
 
 nasm_library(
     name = "nasm_component",
-    src = "nasm_component_test.asm",
-    target_compatible_with = [
-        "@platforms//os:linux",
-    ],
+    src = select({
+        "@platforms//os:linux": "nasm_component_test.asm",
+        "@platforms//os:osx": "nasm_component_test_mac.asm",
+    }),
 )
 
 sh_test(

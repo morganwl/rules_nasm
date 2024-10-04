@@ -2,8 +2,8 @@
 ;
 ; Return 16 from a called function.
 
-global return_16
+global _return_16
 section .text
-return_16:
+_return_16:
         mov rax, 16
         ret
