@@ -6,10 +6,10 @@ load("@rules_nasm//nasm:defs.bzl", "nasm_test", "nasm_library", "nasm_binary")
 nasm_test(
     name = "nasm_test_test",
     size = "small",
-    src = "always_succeed_main.asm",
-    exec_compatible_with = [
-        "//platforms/os:linux",
-    ],
+    src = select({
+        "@platforms//os:linux": "always_succeed_main.asm",
+        "@platforms//os:osx": "always_succeed_main_mac.asm",
+    }),
 )
 
 cc_test(
@@ -22,8 +22,8 @@ cc_test(
 nasm_library(
     name = "nasm_component",
     src = "nasm_component_test.asm",
-    exec_compatible_with = [
-        "//platforms/os:linux",
+    target_compatible_with = [
+        "@platforms//os:linux",
     ],
 )
 
@@ -31,23 +31,23 @@ sh_test(
     name = "nasm_binary_test",
     size = "small",
     srcs = select({
-        "//platforms/os:linux": [":nasm_executable"],
-        "//platforms/os:osx": [":nasm_executable_mac"],
+        "@platforms//os:linux": [":nasm_executable"],
+        "@platforms//os:osx": [":nasm_executable_mac"],
     })
 )
 
 nasm_binary(
     name = "nasm_executable",
     src = "always_succeed_main.asm",
-    exec_compatible_with = [
-        "//platforms/os:linux",
+    target_compatible_with = [
+        "@platforms//os:linux",
     ],
 )
 
 nasm_binary(
     name = "nasm_executable_mac",
     src = "always_succeed_main_mac.asm",
-    exec_compatible_with = [
-        "//platforms/os:osx",
+    target_compatible_with = [
+        "@platforms//os:osx",
     ],
 )
