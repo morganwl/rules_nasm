@@ -29,6 +29,7 @@ def nasm_toolchain(name, target, exec_compatible_with = None):
         args = select({
             Label("//nasm:elf64"): ["-felf64"],
             Label("//nasm:macho64"): ["-fmacho64"],
+            "//conditions:default": [],
         })
     )
 
