@@ -1,5 +1,6 @@
 # Netwide Assembly rules for Bazel
 
+
 ![Testing status](https://github.com/morganwl/rules_nasm/actions/workflows/tests.yaml/badge.svg)
 
 Rules and toolchains for assembling Netwide Assembly (nasm) sources in
