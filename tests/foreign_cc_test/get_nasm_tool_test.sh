@@ -1,0 +1,1 @@
+$NASM -v | grep NASM
