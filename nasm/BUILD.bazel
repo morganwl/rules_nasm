@@ -1,6 +1,6 @@
 toolchain_type(name = "toolchain_type")
 
-load("//nasm:nasm_toolchain.bzl", "nasm_toolchain")
+load("//nasm:nasm_toolchain.bzl", "nasm_toolchain", "nasm_assembler")
 
 config_setting(
     # doc = "Target supports ELF64 binaries (linux x86-64)",
@@ -34,4 +34,9 @@ nasm_toolchain(
     exec_compatible_with = [
         "@platforms//os:osx",
     ],
+)
+
+nasm_assembler(
+    name = "assembler",
+    visibility = ["//visibility:public"],
 )

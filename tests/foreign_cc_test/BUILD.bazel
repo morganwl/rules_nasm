@@ -1,0 +1,7 @@
+sh_test(
+    name = "get_nasm_tool_test",
+    size = "small",
+    env = {"NASM": "$(rootpath @rules_nasm//nasm:assembler)"},
+    srcs = ["get_nasm_tool_test.sh",],
+    data = ["@rules_nasm//nasm:assembler"]
+)
