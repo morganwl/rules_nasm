@@ -48,7 +48,6 @@ def _nasm_assembler_impl(ctx):
         target_file = nasm_info.compiler,
         is_executable = True,
     )
-    print(symlink)
     return [
         DefaultInfo(files = depset([symlink]))
     ]
