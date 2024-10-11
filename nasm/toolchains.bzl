@@ -3,6 +3,7 @@
 """Nasm toolchain repo rules."""
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("//nasm/private:urls.bzl", "NASM_URLS")
 
 def nasm_declare_toolchain_repos(configurations, host_os):
     """Declare all nasm_toolchain repositories.
@@ -22,26 +23,28 @@ def nasm_declare_toolchain_repos(configurations, host_os):
 
 def canonical_name(version, source, os):
     """Get canonical name for toolchain repository."""
-    print(version, source, os)
     name = "%s_%s_%s"%(os, version, source)
     return name.lower().replace(" ", "")
 
 def nasm_declare_repo(version, require_source, os):
     """Declare a nasm repository."""
-    if require_source or os != "mac os x":
-        name = canonical_name(version, "source", os)
-        nasm_declare_repo_source(name, version)
-    else:
-        name = canonical_name(version, "binary", os)
-        nasm_declare_repo_macosx(name, version)
-    print(name)
+    if os == "mac os x" and not require_source:
+        url, checksum = nasm_get_url(version, os)
+        if checksum:
+            name = canonical_name(version, "binary", os)
+            nasm_declare_repo_macosx(name, version, url, checksum)
+            return name
+    url, checksum = nasm_get_url(version, "source")
+    if checksum == None:
+        fail("No nasm release found for %s, %s."%(version, os))
+    name = canonical_name(version, "source", os)
+    nasm_declare_repo_source(name, version, url, checksum)
     return name
 
 def nasm_define_toolchain(name):
     """Define a toolchain rule based on a toolchain name."""
     os = name.split("_")[0]
     toolchain_label = "@{name}//:toolchain_impl".format(name = name)
-    print(os, toolchain_label)
     rule = """\
 toolchain(
     name = "{name}_toolchain",
@@ -57,7 +60,6 @@ toolchain(
         toolchain_type = Label("//nasm:toolchain_type"),
         os = os,
     )
-    print(rule)
     return rule
 
 def _nasm_toolchains_impl(rctx):
@@ -74,28 +76,34 @@ nasm_toolchains = repository_rule(
     }
 )
 
-def nasm_declare_repo_source(name, version):
+def nasm_get_url(version, platform):
+    """Get the URL and checksum for a version."""
+    if platform == "mac os x":
+        url = "https://www.nasm.us/pub/nasm/releasebuilds/2.16.03/macosx/nasm-{}-macosx.zip"%version
+    else:
+        url = "https://www.nasm.us/pub/nasm/releasebuilds/%s/nasm-%s.tar.gz"%(version, version)
+    return url, NASM_URLS.get(url, None)
+
+def nasm_declare_repo_source(name, version, url, checksum):
     """Declare a nasm repository to be built from source."""
-    print(name)
     http_archive(
         name = name,
         build_file = Label("//third_party/nasm:source.BUILD"),
-        url = "https://www.nasm.us/pub/nasm/releasebuilds/%s/nasm-%s.tar.gz"%(version, version),
+        url = url,
         patches = [Label("//nasm/toolchain:ver.patch")],
         patch_args = ["-p1"],
         strip_prefix = "nasm-%s"%version,
-        sha256 = "5bc940dd8a4245686976a8f7e96ba9340a0915f2d5b88356874890e207bdb581",
+        sha256 = checksum,
     )
 
-def nasm_declare_repo_macosx(name, version):
+def nasm_declare_repo_macosx(name, version, url, checksum):
     """Declare a nasm repository with MacOS executable."""
-    print(name)
     http_archive(
         name = name,
         build_file = Label("//third_party/nasm:macosx.BUILD"),
-        url = "https://www.nasm.us/pub/nasm/releasebuilds/2.16.03/macosx/nasm-{}-macosx.zip"%version,
+        url = url,
         strip_prefix = "nasm-{}"%version,
-        sha256 = "0d29bcd8a5fc617333f4549c7c1f93d1866a4a0915c40359e0a8585bb1a5aa75",
+        sha256 = checksum,
     )
 
 
