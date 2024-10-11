@@ -1,4 +1,4 @@
-toolchain_type(name = "toolchain_type")
+toolchain_type(name = "toolchain_type", visibility = ["//visibility:public"])
 
 load("//nasm:nasm_toolchain.bzl", "nasm_toolchain", "nasm_assembler")
 
@@ -20,21 +20,21 @@ config_setting(
     ],
 )
 
-nasm_toolchain(
-    name = "nasm_source",
-    target = "@nasm_source//:nasm",
-    exec_compatible_with = [
-        "@platforms//os:linux",
-    ],
-)
+# nasm_toolchain(
+#     name = "nasm_source",
+#     target = "@nasm_source//:nasm",
+#     exec_compatible_with = [
+#         "@platforms//os:linux",
+#     ],
+# )
 
-nasm_toolchain(
-    name = "nasm_macosx",
-    target = "@nasm_macosx//:compiler",
-    exec_compatible_with = [
-        "@platforms//os:osx",
-    ],
-)
+# nasm_toolchain(
+#     name = "nasm_macosx",
+#     target = "@nasm_macosx//:compiler",
+#     exec_compatible_with = [
+#         "@platforms//os:osx",
+#     ],
+# )
 
 nasm_assembler(
     name = "assembler",

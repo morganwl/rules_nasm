@@ -69,13 +69,22 @@
   "moduleExtensions": {
     "//nasm:extensions.bzl%nasm": {
       "general": {
-        "bzlTransitiveDigest": "ndDuCcXSmbnfq3dKi9wW6PNs/d19eGFIRkYkaIKtRlc=",
+        "bzlTransitiveDigest": "bkHvzy8hUK5KLuGOdrxRNn29fFJyfaqXTrcdHRBzbWk=",
         "usagesDigest": "68Nq7nkCX5926bm7YcQrpdAE/JdBUcACZxk2x87K6cs=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
         "generatedRepoSpecs": {
-          "nasm_source": {
+          "nasm_toolchains": {
+            "bzlFile": "@@//nasm:toolchains.bzl",
+            "ruleClassName": "nasm_toolchains",
+            "attributes": {
+              "toolchains": [
+                "linux_2.16.03_source"
+              ]
+            }
+          },
+          "linux_2.16.03_source": {
             "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
             "ruleClassName": "http_archive",
             "attributes": {
@@ -89,16 +98,6 @@
               ],
               "strip_prefix": "nasm-2.16.03",
               "sha256": "5bc940dd8a4245686976a8f7e96ba9340a0915f2d5b88356874890e207bdb581"
-            }
-          },
-          "nasm_macosx": {
-            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
-            "ruleClassName": "http_archive",
-            "attributes": {
-              "build_file": "@@//third_party/nasm:macosx.BUILD",
-              "url": "https://www.nasm.us/pub/nasm/releasebuilds/2.16.03/macosx/nasm-2.16.03-macosx.zip",
-              "strip_prefix": "nasm-2.16.03",
-              "sha256": "0d29bcd8a5fc617333f4549c7c1f93d1866a4a0915c40359e0a8585bb1a5aa75"
             }
           }
         },

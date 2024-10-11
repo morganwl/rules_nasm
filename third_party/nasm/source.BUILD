@@ -1,4 +1,5 @@
 load("@rules_foreign_cc//foreign_cc:defs.bzl", "configure_make")
+load("@rules_nasm//nasm:nasm_toolchain.bzl", "nasm_toolchain")
 
 filegroup(
     name = "nasm_src",
@@ -31,4 +32,15 @@ genrule(
     cmd = "cp $< $@",
     executable = True,
     visibility = ["//visibility:public"],
+)
+
+nasm_toolchain(
+    name = "toolchain_impl",
+    target = "//:nasm",
+    visibility = ["//visibility:public"],
+    args = select({
+            "@rules_nasm//nasm:elf64": ["-felf64"],
+            "@rules_nasm//nasm:macho64": ["-fmacho64"],
+            "//conditions:default": [],
+        }),
 )
