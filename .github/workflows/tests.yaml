@@ -33,4 +33,5 @@ jobs:
           USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
           USE_BZLMOD: ${{ matrix.bzlmod }}
         run:
+          uname
           bazel test //tests:all --google_credentials="${{ steps.auth.outputs.credentials_file_path }}"
