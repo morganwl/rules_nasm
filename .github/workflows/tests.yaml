@@ -15,6 +15,10 @@ jobs:
         bazel_version: [7.0.0, latest]
         bzlmod: [true, false]
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: 'read'
+      packages: 'read'
+      id-token: 'write'
     steps:
       - uses: actions/checkout@v4
       - id: 'auth'
