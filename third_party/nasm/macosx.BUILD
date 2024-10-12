@@ -2,6 +2,8 @@
 
 """Nasm toolchain for MacOS."""
 
+load("@rules_nasm//nasm:nasm_toolchain.bzl", "nasm_toolchain")
+
 filegroup(
     name = "nasm_file",
     srcs = ["nasm"],
