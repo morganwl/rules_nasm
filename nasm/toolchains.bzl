@@ -94,7 +94,7 @@ def nasm_declare_repo_source(name, version, url, checksum):
         url = url,
         patches = [Label("//nasm/toolchain:ver.patch")],
         patch_args = ["-p1"],
-        strip_prefix = "nasm-%s"%version,
+        strip_prefix = "nasm-{version}".format(version = version),
         sha256 = checksum,
     )
 
@@ -104,6 +104,6 @@ def nasm_declare_repo_macosx(name, version, url, checksum):
         name = name,
         build_file = Label("//third_party/nasm:macosx.BUILD"),
         url = url,
-        strip_prefix = "nasm-{}"%version,
+        strip_prefix = "nasm-{version}".format(version = version),
         sha256 = checksum,
     )
