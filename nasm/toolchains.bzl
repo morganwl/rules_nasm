@@ -80,9 +80,10 @@ def nasm_get_url(version, platform):
     """Get the URL and checksum for a version."""
     if platform == "mac os x":
         url = ("https://www.nasm.us/pub/nasm/releasebuilds/{version}/" +
-               "macosx/nasm-{version}-macosx.zip").format(version)
+               "macosx/nasm-{version}-macosx.zip").format(version = version)
     else:
-        url = "https://www.nasm.us/pub/nasm/releasebuilds/%s/nasm-%s.tar.gz"%(version, version)
+        url = ("https://www.nasm.us/pub/nasm/releasebuilds/{version}/" +
+               "nasm-{version}.tar.gz").format(version = version)
     return url, NASM_URLS.get(url, None)
 
 def nasm_declare_repo_source(name, version, url, checksum):

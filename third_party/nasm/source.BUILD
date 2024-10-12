@@ -38,7 +38,7 @@ genrule(
 
 nasm_toolchain(
     name = "toolchain_impl",
-    target = "//:nasm",
+    target = "//:assembler",
     visibility = ["//visibility:public"],
     args = select({
             "@rules_nasm//nasm:elf64": ["-felf64"],
