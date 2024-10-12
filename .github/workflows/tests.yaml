@@ -17,10 +17,18 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          project_id: 'movieburn'
+          workload_identity_provider: 'projects/294914671277/locations/global/workloadIdentityPools/movieburn-bazel/providers/movieburn-provider'
+          service_account: 'mwl-service-account@movieburn.iam.gserviceaccount.com'
+          token_format: 'access_token'
       - name: Test
         env:
           USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
           USE_BZLMOD: ${{ matrix.bzlmod }}
         run:
-          bazel test //tests/...
+          bazel test //tests/... \
+            --google_credentials="${{ steps.auth.outputs.credentials_file_path }}"
 

@@ -28,7 +28,7 @@ def canonical_name(version, source, os):
 
 def nasm_declare_repo(version, require_source, os):
     """Declare a nasm repository."""
-    if os == "mac os x" and not require_source:
+    if os == "macos" and not require_source:
         url, checksum = nasm_get_url(version, os)
         if checksum:
             name = canonical_name(version, "binary", os)
@@ -78,7 +78,7 @@ nasm_toolchains = repository_rule(
 
 def nasm_get_url(version, platform):
     """Get the URL and checksum for a version."""
-    if platform == "mac os x":
+    if platform == "macos":
         url = ("https://www.nasm.us/pub/nasm/releasebuilds/{version}/" +
                "macosx/nasm-{version}-macosx.zip").format(version = version)
     else:
