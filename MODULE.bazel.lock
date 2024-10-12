@@ -69,7 +69,7 @@
   "moduleExtensions": {
     "//nasm:extensions.bzl%nasm": {
       "general": {
-        "bzlTransitiveDigest": "DGCrsmjTDWVbyZZ9Xl8aZ2xiLi5ucGhvHzJyHahqYQo=",
+        "bzlTransitiveDigest": "UzAfIBuClKUdmkgIRm2kPUWFSKTnQJfdKWaYfljTI2U=",
         "usagesDigest": "ZSjz2zTD0IpZiS2jCISrnHcz8fXkkOPqClZIzGA9ASY=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},

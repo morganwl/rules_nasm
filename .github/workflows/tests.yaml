@@ -35,4 +35,3 @@ jobs:
         run:
           bazel test //tests/... \
             --google_credentials="${{ steps.auth.outputs.credentials_file_path }}"
-
