@@ -15,6 +15,10 @@ _toolchain = tag_class(
             doc = ("Build nasm from source, even when a compatible binary " +
                    "release is available."),
             default = False,
+        ),
+        "_repo_name": attr.string(
+            doc = ("Name of repo where toolchains will be registered. For internal use."),
+            default = "nasm_toolchains",
         )
     }
 )
@@ -28,19 +32,23 @@ def get_unique_toolchain_tags(module_ctx):
     Returns:
         A dictionary of (version, require_source) tuples.
     """
-    configurations = {}
+    configuration_groups = {"nasm_toolchains": {}}
     for mod in module_ctx.modules:
         for toolchain in mod.tags.toolchain:
-            configurations[(toolchain.nasm_version, toolchain.require_source)] = True
-    return configurations
+            group = toolchain._repo_name
+            if group not in configuration_groups:
+                configuration_groups[group] = {}
+            configuration_groups[group][(toolchain.nasm_version, toolchain.require_source)] = True
+    return configuration_groups
 
 def _nasm_impl(module_ctx):
     host_os = module_ctx.os.name
-    configurations = get_unique_toolchain_tags(module_ctx)
-    toolchains = nasm_declare_toolchain_repos(configurations, host_os)
-    nasm_toolchains(
-        name = "nasm_toolchains",
-        toolchains = toolchains,
+    config_groups = get_unique_toolchain_tags(module_ctx)
+    for name, group in config_groups.items():
+        toolchains = nasm_declare_toolchain_repos(group, host_os)
+        nasm_toolchains(
+            name = name,
+            toolchains = toolchains,
     )
     # identify all unique requested toolchains
     # fetch a repo for each requested toolchain

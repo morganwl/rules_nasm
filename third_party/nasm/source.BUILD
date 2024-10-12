@@ -9,6 +9,8 @@ filegroup(
 configure_make(
     name = "make_nasm",
     lib_source = ":nasm_src",
+    autogen = True,
+    configure_in_place = True,
     targets = [
         "",
         "install",
@@ -26,7 +28,7 @@ filegroup(
 )
 
 genrule(
-    name = "nasm",
+    name = "assembler",
     srcs = [":nasm_bin"],
     outs = ["nasm"],
     cmd = "cp $< $@",

@@ -8,6 +8,8 @@ bazel_dep(name = "platforms", version = "0.0.10")
 
 nasm = use_extension("//nasm:extensions.bzl", "nasm")
 
-nasm.toolchain(nasm_version = "2.16.03")
-use_repo(nasm, "nasm_toolchains")
+nasm.toolchain(nasm_version = "2.16.03", _repo_name="nasm_test_toolchains")
+nasm.toolchain(nasm_version = "2.16.02", _repo_name="nasm_test_toolchains")
+nasm.toolchain(nasm_version = "2.16.01", _repo_name="nasm_test_toolchains")
+use_repo(nasm, "nasm_toolchains", "nasm_test_toolchains")
 register_toolchains("@nasm_toolchains//:all")

@@ -69,8 +69,8 @@
   "moduleExtensions": {
     "//nasm:extensions.bzl%nasm": {
       "general": {
-        "bzlTransitiveDigest": "lVprwWeT4w80KqtiPtyZE1KUHyXZxTG3RVFi5h4w65I=",
-        "usagesDigest": "68Nq7nkCX5926bm7YcQrpdAE/JdBUcACZxk2x87K6cs=",
+        "bzlTransitiveDigest": "koVFV9KZCtlszIXzT8R0sRbdR3P0StsP09cYieDcxCc=",
+        "usagesDigest": "ZSjz2zTD0IpZiS2jCISrnHcz8fXkkOPqClZIzGA9ASY=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -79,9 +79,7 @@
             "bzlFile": "@@//nasm:toolchains.bzl",
             "ruleClassName": "nasm_toolchains",
             "attributes": {
-              "toolchains": [
-                "linux_2.16.03_source"
-              ]
+              "toolchains": []
             }
           },
           "linux_2.16.03_source": {
@@ -98,6 +96,49 @@
               ],
               "strip_prefix": "nasm-2.16.03",
               "sha256": "5bc940dd8a4245686976a8f7e96ba9340a0915f2d5b88356874890e207bdb581"
+            }
+          },
+          "linux_2.16.02_source": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "build_file": "@@//third_party/nasm:source.BUILD",
+              "url": "https://www.nasm.us/pub/nasm/releasebuilds/2.16.02/nasm-2.16.02.tar.gz",
+              "patches": [
+                "@@//nasm/toolchain:ver.patch"
+              ],
+              "patch_args": [
+                "-p1"
+              ],
+              "strip_prefix": "nasm-2.16.02",
+              "sha256": "3ab7ca964f741fc05efc50689382f6730fce96bc73e4e74e5fcce66cc973abce"
+            }
+          },
+          "linux_2.16.01_source": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "build_file": "@@//third_party/nasm:source.BUILD",
+              "url": "https://www.nasm.us/pub/nasm/releasebuilds/2.16.01/nasm-2.16.01.tar.gz",
+              "patches": [
+                "@@//nasm/toolchain:ver.patch"
+              ],
+              "patch_args": [
+                "-p1"
+              ],
+              "strip_prefix": "nasm-2.16.01",
+              "sha256": "d833bf0f5716e89dbcd345b7f545f25fe348c6e2ef16dbc293e1027bcd22d881"
+            }
+          },
+          "nasm_test_toolchains": {
+            "bzlFile": "@@//nasm:toolchains.bzl",
+            "ruleClassName": "nasm_toolchains",
+            "attributes": {
+              "toolchains": [
+                "linux_2.16.03_source",
+                "linux_2.16.02_source",
+                "linux_2.16.01_source"
+              ]
             }
           }
         },
