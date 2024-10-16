@@ -1,6 +1,6 @@
-toolchain_type(name = "toolchain_type")
+toolchain_type(name = "toolchain_type", visibility = ["//visibility:public"])
 
-load("//nasm:nasm_toolchain.bzl", "nasm_toolchain", "nasm_assembler")
+load("//nasm:nasm_toolchain.bzl", "nasm_assembler")
 
 config_setting(
     # doc = "Target supports ELF64 binaries (linux x86-64)",
@@ -20,23 +20,20 @@ config_setting(
     ],
 )
 
-nasm_toolchain(
-    name = "nasm_source",
-    target = "@nasm_source//:nasm",
-    exec_compatible_with = [
-        "@platforms//os:linux",
-    ],
-)
-
-nasm_toolchain(
-    name = "nasm_macosx",
-    target = "@nasm_macosx//:compiler",
-    exec_compatible_with = [
-        "@platforms//os:osx",
-    ],
-)
-
 nasm_assembler(
     name = "assembler",
     visibility = ["//visibility:public"],
+)
+
+load("@stardoc//stardoc:stardoc.bzl", "stardoc")
+
+stardoc(
+    name = "docs",
+    input = "defs.bzl",
+    out = "docs.md",
+    deps = [
+        "//nasm/private/rules:binary",
+        "//nasm/private/rules:library",
+        "//nasm/private/rules:test",
+    ],
 )
