@@ -50,6 +50,7 @@ def map_os(java_os):
 
 def _nasm_impl(module_ctx):
     host_os = map_os(module_ctx.os.name)
+    print(host_os)
     config_groups = get_unique_toolchain_tags(module_ctx)
     for name, group in config_groups.items():
         toolchains = nasm_declare_toolchain_repos(group, host_os)
