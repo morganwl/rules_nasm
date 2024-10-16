@@ -5,6 +5,8 @@
 Rules and toolchains for assembling Netwide Assembly (nasm) sources in
 Bazel.
 
+Currently supports Linux x86-64 and Mac x86-64.
+
 This is a minimally functional proof of concept and is provided without
 assurances. Contributions, feedback, and bug reports are welcome.
 
@@ -25,29 +27,16 @@ nasm.toolchain(
 )
 ```
 
-If you are not using `bzlmod`, add the following to `WORKSPACE`:
-
-```starlark
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-
-http_archive(
-    name = "rules_nasm",
-    sha256 = "<unknown>",
-    strip_prefix = "rules_nasm-0.1.0",
-    url = "https://github.com/morganwl/rules_nasm/releases/...",
-)
-
-load("@rules_nasm//nasm:deps.bzl", "rules_nasm_dependencies",
-"nasm_toolchain", "nasm_register_toolchains")
-
-rules_nasm_dependencies()
-
-nasm_toolchain(
-    name = "nasm_toolchain",
-    nasm_version = "2.16.03",
-)
-
-nasm_register_toolchains()
-```
-
 ## Usage
+
+A toolchain dependency must be explicitly specified in order to use the
+`nasm` rules. The toolchain configuration will look for an existing
+binary of the desired version; if none exists, the assembler will be
+built from source.
+
+`@nasm:defs.bzl` exposes three rules: `nasm_test`, `nasm_library` and
+`nasm_binary`. `nasm_library` can be used as a dependency for the cc
+toolchain.
+
+The target `@nasm:assembler` can be used to expose the path to the
+currently configured assembler executable.
