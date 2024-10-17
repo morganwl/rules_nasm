@@ -18,10 +18,10 @@ SHA=$(shasum -a 256 $ARCHIVE | awk '{print $1}')
 cat << EOF
 Minimum bazel version: **7.0.0**
 
-**(Support for projects not using `bzlmod` will be added in a future
+**(Support for projects not using \`bzlmod\` will be added in a future
 release.)**
 
-If you're using `bzlmod`, add the following to `MODULE.bazel`:
+If you're using \`bzlmod\`, add the following to \`MODULE.bazel\`:
 
 \`\`\`starlark
 bazel_dep(name = "rules_nasm", version = "${TAG:1}")
@@ -34,6 +34,3 @@ nasm.toolchain(
 \`\`\`
 
 EOF
-
-awk 'f;/--SNIP--/{f=1}' e2e/smoke/WORKSPACE.bazel
-echo "\`\`\`" 
