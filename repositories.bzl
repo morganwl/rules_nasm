@@ -2,6 +2,7 @@
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
+load("//nasm:toolchains.bzl", "nasm_declare_toolchain_repos")
 
 def rules_nasm_dependencies():
     """Load any missing external repos required by rules_nasm."""
@@ -23,3 +24,7 @@ def rules_nasm_dependencies():
         strip_prefix = "bazel_features-1.18.0",
         url = "https://github.com/bazel-contrib/bazel_features/releases/download/v1.18.0/bazel_features-v1.18.0.tar.gz",
     )
+
+def nasm_register_toolchains(version, os=None, require_source=None):
+    nasm_declare_toolchain_repos([version, require_source], host_os)
+
