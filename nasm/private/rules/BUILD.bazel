@@ -1,13 +1,19 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 
 bzl_library(
-    name = "test",
-    srcs = ["test.bzl"],
+    name = "binary",
+    srcs = ["binary.bzl"],
     visibility = ["//nasm:__subpackages__"],
 )
 
 bzl_library(
     name = "library",
     srcs = ["library.bzl"],
+    visibility = ["//nasm:__subpackages__"],
+)
+
+bzl_library(
+    name = "test",
+    srcs = ["test.bzl"],
     visibility = ["//nasm:__subpackages__"],
 )
