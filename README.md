@@ -61,4 +61,5 @@ currently configured assembler executable.
 ## Known Issues
 
 Bugs, known issues, and planned features are documented in
-[Issues](issues). Additional issue reports are welcome.
+[Issues](https://github.com/morganwl/rules_nasm/issues). Additional
+issue reports are welcome.
