@@ -1,5 +1,6 @@
 toolchain_type(name = "toolchain_type", visibility = ["//visibility:public"])
 
+load("@stardoc//stardoc:stardoc.bzl", "stardoc")
 load("//nasm:nasm_toolchain.bzl", "nasm_assembler")
 
 config_setting(
@@ -24,8 +25,6 @@ nasm_assembler(
     name = "assembler",
     visibility = ["//visibility:public"],
 )
-
-load("@stardoc//stardoc:stardoc.bzl", "stardoc")
 
 stardoc(
     name = "docs",
