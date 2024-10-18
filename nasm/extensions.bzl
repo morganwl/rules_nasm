@@ -34,16 +34,17 @@ def get_unique_toolchain_tags(module_ctx):
         module_ctx: The context of rules_nasm.
 
     Returns:
-        A dictionary of (version, require_source) tuples.
+        A mapping of (version, require_source) tuples to a list of toolchain groups.
     """
-    configuration_groups = {"nasm_toolchains": {}}
+    configurations = {}
     for mod in module_ctx.modules:
         for toolchain in mod.tags.toolchain:
             group = toolchain._repo_name
-            if group not in configuration_groups:
-                configuration_groups[group] = {}
-            configuration_groups[group][(toolchain.nasm_version, toolchain.require_source)] = True
-    return configuration_groups
+            configuration = (toolchain.nasm_version, toolchain.require_source)
+            if configuration not in configurations:
+                configurations[configuration] = []
+            configurations[configuration].append(group)
+    return configurations
 
 def map_os(java_os):
     return OS_MAP.get(java_os, java_os)
@@ -51,13 +52,19 @@ def map_os(java_os):
 def _nasm_impl(module_ctx):
     host_os = map_os(module_ctx.os.name)
     print(host_os)
-    config_groups = get_unique_toolchain_tags(module_ctx)
-    for name, group in config_groups.items():
-        toolchains = nasm_declare_toolchain_repos(group, host_os)
+    configurations = get_unique_toolchain_tags(module_ctx)
+    repo_names = nasm_declare_toolchain_repos(configurations, host_os)
+    configuration_groups = {"nasm_toolchains": []}
+    for configuration, groups in configurations.items():
+        for g in groups:
+            if g not in configuration_groups:
+                configuration_groups[g] = []
+            configuration_groups[g].append(repo_names[configuration])
+    for name, toolchains in configuration_groups.items():
         nasm_toolchains(
             name = name,
-            toolchains = toolchains,
-    )
+            toolchains = toolchains
+        )
 
 nasm = module_extension(
     implementation = _nasm_impl,

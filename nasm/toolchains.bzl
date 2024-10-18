@@ -15,10 +15,10 @@ def nasm_declare_toolchain_repos(configurations, host_os):
     Returns:
         [str], a list of toolchain repository names.
     """
-    toolchains = []
+    toolchains = {}
     for version, require_source in configurations:
         repo_name = nasm_declare_repo(version, require_source, host_os)
-        toolchains.append(repo_name)
+        toolchains[(version, require_source)] = repo_name
     return toolchains
 
 def canonical_name(version, source, os):
