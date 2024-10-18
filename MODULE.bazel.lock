@@ -87,8 +87,8 @@
   "moduleExtensions": {
     "//nasm:extensions.bzl%nasm": {
       "general": {
-        "bzlTransitiveDigest": "AndwACChqKTQq51IfTGYBddSfX8SiWi9Vrbq/Qq5X18=",
-        "usagesDigest": "GxdbZYjEJWjvQlYsyt668cPpVkSzizZ+XEqOyLBYPRQ=",
+        "bzlTransitiveDigest": "sASSAjJFo+PekzIDPCecPnOaLPpuc1meDxVCVYauaX0=",
+        "usagesDigest": "af81+YAdB5DSLIvqwXkktAmCp1OUo9dmRoArDS3z5jM=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},

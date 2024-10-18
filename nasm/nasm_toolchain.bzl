@@ -22,24 +22,6 @@ nasm_toolchain = rule(
     },
 )
 
-# def nasm_toolchain(name, target, exec_compatible_with = None):
-#     _nasm_toolchain(
-#         name = name,
-#         target = target,
-#         args = select({
-#             Label("//nasm:elf64"): ["-felf64"],
-#             Label("//nasm:macho64"): ["-fmacho64"],
-#             "//conditions:default": [],
-#         })
-#     )
-
-#     native.toolchain(
-#         name = name + "_toolchain",
-#         toolchain = ":" + name,
-#         toolchain_type = Label("//nasm:toolchain_type"),
-#         exec_compatible_with = exec_compatible_with,
-#     )
-
 def _nasm_assembler_impl(ctx):
     nasm_info = ctx.toolchains["//nasm:toolchain_type"]
     symlink = ctx.actions.declare_file("nasm")
