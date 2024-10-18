@@ -86,8 +86,8 @@
   "selectedYankedVersions": {},
   "moduleExtensions": {
     "//nasm:extensions.bzl%nasm": {
-      "general": {
-        "bzlTransitiveDigest": "TbvW3YZxAKJ2aY/s4qPxsfNdWKlkb9zT5CHPdMFFtK8=",
+      "os:linux,arch:amd64": {
+        "bzlTransitiveDigest": "sAivJ+wqm/dJH7RnkMm3bGbAmggI/LrqjugGh2fq0AM=",
         "usagesDigest": "mSZRutjpQvxx362seLchsN9elPHlWCOQ24wxYsxwX9E=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
