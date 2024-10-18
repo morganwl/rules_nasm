@@ -1,6 +1,4 @@
-build --remote_cache=https://storage.googleapis.com/rules-nasm-bazel-cache
+import %workspace%/remote.bazelrc
 
 test --extra_toolchains @nasm_test_toolchains//:all
 test --test_output=errors
-test --remote_cache=https://storage.googleapis.com/rules-nasm-bazel-cache
-
