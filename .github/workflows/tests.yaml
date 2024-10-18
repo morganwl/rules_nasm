@@ -28,8 +28,14 @@ jobs:
           workload_identity_provider: 'projects/294914671277/locations/global/workloadIdentityPools/movieburn-bazel/providers/movieburn-provider'
           service_account: 'mwl-service-account@movieburn.iam.gserviceaccount.com'
           token_format: 'access_token'
-      - name: Test
+      - name: Unit
         env:
           USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
         run:
-          bazel test //tests:all --google_credentials="${{ steps.auth.outputs.credentials_file_path }}" --${{ matrix.bzlmod }}
+          bazel test //... --google_credentials="${{ steps.auth.outputs.credentials_file_path }}" --${{ matrix.bzlmod }}
+      - name: Smoke
+        working-directory: e2e/smoke
+        env:
+          USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
+        run:
+          bazel test //... --google_credentials="${{ steps.auth.outputs.credentials_file_path }}" --${{ matrix.bzlmod }}
