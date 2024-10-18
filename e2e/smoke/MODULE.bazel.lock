@@ -4176,8 +4176,8 @@
     },
     "@@rules_nasm~//nasm:extensions.bzl%nasm": {
       "general": {
-        "bzlTransitiveDigest": "AndwACChqKTQq51IfTGYBddSfX8SiWi9Vrbq/Qq5X18=",
-        "usagesDigest": "cAnmHqiMidZxBuAIswpweUVYuhUblvyIUtTn1slhldQ=",
+        "bzlTransitiveDigest": "sASSAjJFo+PekzIDPCecPnOaLPpuc1meDxVCVYauaX0=",
+        "usagesDigest": "4Xnv6illUMFuA9VdWv+qohwBGi/6DukHMuB+93k+r7I=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -4244,6 +4244,7 @@
             "ruleClassName": "nasm_toolchains",
             "attributes": {
               "toolchains": [
+                "linux_2.16.03_source",
                 "linux_2.16.02_source",
                 "linux_2.16.01_source"
               ]
