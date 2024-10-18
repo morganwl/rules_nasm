@@ -4176,7 +4176,7 @@
     },
     "@@rules_nasm~//nasm:extensions.bzl%nasm": {
       "general": {
-        "bzlTransitiveDigest": "GU4lmHkHQRY4nLBPHAfsUsagNt8cRL9WoGR7oVPoMLs=",
+        "bzlTransitiveDigest": "TbvW3YZxAKJ2aY/s4qPxsfNdWKlkb9zT5CHPdMFFtK8=",
         "usagesDigest": "4Xnv6illUMFuA9VdWv+qohwBGi/6DukHMuB+93k+r7I=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},

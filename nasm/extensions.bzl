@@ -72,4 +72,6 @@ nasm = module_extension(
     tag_classes = {
         "toolchain": _toolchain,
     },
+    os_dependent = True,
+    arch_dependent = True,
 )
