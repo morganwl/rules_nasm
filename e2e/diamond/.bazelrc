@@ -1,0 +1,4 @@
+import %workspace%/../../remote.bazelrc
+
+build --remote_cache=https://storage.googleapis.com/rules-nasm-bazel-cache
+test --remote_cache=https://storage.googleapis.com/rules-nasm-bazel-cache
