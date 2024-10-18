@@ -1,0 +1,1 @@
+test --extra_toolchains @nasm_test_toolchains//:all
