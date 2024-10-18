@@ -67,9 +67,16 @@ def _nasm_impl(module_ctx):
             toolchains = toolchains
         )
 
+# only provide these attributes if current Bazel version supports them
+os_arch_dependent_kwargs = {
+    "os_dependent": True,
+    "arch_dependent": True,
+} if bazel_features.external_deps.module_extension_has_os_arch_dependent else {}
+
 nasm = module_extension(
     implementation = _nasm_impl,
     tag_classes = {
         "toolchain": _toolchain,
     },
+    **os_arch_dependent_kwargs,
 )
