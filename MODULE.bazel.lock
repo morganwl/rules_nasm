@@ -9,8 +9,8 @@
     "https://bcr.bazel.build/modules/apple_support/1.5.0/source.json": "eb98a7627c0bc486b57f598ad8da50f6625d974c8f723e9ea71bd39f709c9862",
     "https://bcr.bazel.build/modules/bazel_features/1.11.0/MODULE.bazel": "f9382337dd5a474c3b7d334c2f83e50b6eaedc284253334cf823044a26de03e8",
     "https://bcr.bazel.build/modules/bazel_features/1.15.0/MODULE.bazel": "d38ff6e517149dc509406aca0db3ad1efdd890a85e049585b7234d04238e2a4d",
-    "https://bcr.bazel.build/modules/bazel_features/1.18.0/MODULE.bazel": "1be0ae2557ab3a72a57aeb31b29be347bcdc5d2b1eb1e70f39e3851a7e97041a",
-    "https://bcr.bazel.build/modules/bazel_features/1.18.0/source.json": "cde886d88c8164b50b9b97dba7c0a64ca24d257b72ca3a2fcb06bee1fdb47ee4",
+    "https://bcr.bazel.build/modules/bazel_features/1.19.0/MODULE.bazel": "59adcdf28230d220f0067b1f435b8537dd033bfff8db21335ef9217919c7fb58",
+    "https://bcr.bazel.build/modules/bazel_features/1.19.0/source.json": "d7bf14517c1b25b9d9c580b0f8795fceeae08a7590f507b76aace528e941375d",
     "https://bcr.bazel.build/modules/bazel_skylib/1.0.3/MODULE.bazel": "bcb0fd896384802d1ad283b4e4eb4d718eebd8cb820b0a2c3a347fb971afd9d8",
     "https://bcr.bazel.build/modules/bazel_skylib/1.2.0/MODULE.bazel": "44fe84260e454ed94ad326352a698422dbe372b21a1ac9f3eab76eb531223686",
     "https://bcr.bazel.build/modules/bazel_skylib/1.2.1/MODULE.bazel": "f35baf9da0efe45fa3da1696ae906eea3d615ad41e2e3def4aeb4e8bc0ef9a7a",
@@ -88,7 +88,7 @@
     "//nasm:extensions.bzl%nasm": {
       "general": {
         "bzlTransitiveDigest": "sASSAjJFo+PekzIDPCecPnOaLPpuc1meDxVCVYauaX0=",
-        "usagesDigest": "af81+YAdB5DSLIvqwXkktAmCp1OUo9dmRoArDS3z5jM=",
+        "usagesDigest": "mSZRutjpQvxx362seLchsN9elPHlWCOQ24wxYsxwX9E=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -98,6 +98,22 @@
             "ruleClassName": "nasm_toolchains",
             "attributes": {
               "toolchains": []
+            }
+          },
+          "linux_2.16.03_source": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "build_file": "@@//third_party/nasm:source.BUILD",
+              "url": "https://www.nasm.us/pub/nasm/releasebuilds/2.16.03/nasm-2.16.03.tar.gz",
+              "patches": [
+                "@@//nasm/toolchain:ver.patch"
+              ],
+              "patch_args": [
+                "-p1"
+              ],
+              "strip_prefix": "nasm-2.16.03",
+              "sha256": "5bc940dd8a4245686976a8f7e96ba9340a0915f2d5b88356874890e207bdb581"
             }
           },
           "linux_2.16.02_source": {
@@ -137,6 +153,7 @@
             "ruleClassName": "nasm_toolchains",
             "attributes": {
               "toolchains": [
+                "linux_2.16.03_source",
                 "linux_2.16.02_source",
                 "linux_2.16.01_source"
               ]
