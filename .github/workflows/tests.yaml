@@ -31,7 +31,8 @@ jobs:
       - name: Unit
         env:
           USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
-        run:
+        run: |
+          bazel mod show_extension rules_nasm//nasm:extensions.bzl%nasm
           bazel test //... --google_credentials="${{ steps.auth.outputs.credentials_file_path }}" --${{ matrix.bzlmod }}
       - name: Smoke
         working-directory: e2e/smoke
