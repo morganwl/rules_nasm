@@ -71,9 +71,11 @@ def _nasm_toolchains_impl(rctx):
 
 nasm_toolchains = repository_rule(
     implementation = _nasm_toolchains_impl,
+    configure = True,
+    local = True,
     attrs = {
         "toolchains": attr.string_list()
-    }
+    },
 )
 
 def nasm_get_url(version, platform):
