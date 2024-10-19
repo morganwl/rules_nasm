@@ -7,7 +7,7 @@ bazel_dep(name = "bazel_features", version = "1.19.0",)
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "rules_foreign_cc", version = "0.12.0",)
 bazel_dep(name = "platforms", version = "0.0.10")
-bazel_dep(name = "stardoc", version = "0.7.1")
+bazel_dep(name = "stardoc", version = "0.7.1", dev_dependency = True)
 
 nasm = use_extension("//nasm:extensions.bzl", "nasm")
 
