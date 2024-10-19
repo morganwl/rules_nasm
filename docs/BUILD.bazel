@@ -1,12 +1,11 @@
 load("@stardoc//stardoc:stardoc.bzl", "stardoc")
+load("@aspect_bazel_lib//lib:docs.bzl", "stardoc_with_diff_test", "update_docs")
 
-stardoc(
+stardoc_with_diff_test(
     name = "docs",
-    input = "//nasm:defs.bzl",
-    out = "docs.md",
-    deps = [
-        "//nasm/private/rules:binary",
-        "//nasm/private/rules:library",
-        "//nasm/private/rules:test",
-    ],
+    bzl_library_target = "//nasm:defs",
+)
+
+update_docs(
+    name = "update",
 )
