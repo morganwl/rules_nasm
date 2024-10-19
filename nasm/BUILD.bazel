@@ -1,7 +1,10 @@
 toolchain_type(name = "toolchain_type", visibility = ["//visibility:public"])
 
-load("@stardoc//stardoc:stardoc.bzl", "stardoc")
 load("//nasm:nasm_toolchain.bzl", "nasm_assembler")
+
+exports_files([
+    "defs.bzl",
+])
 
 config_setting(
     # doc = "Target supports ELF64 binaries (linux x86-64)",
@@ -24,15 +27,4 @@ config_setting(
 nasm_assembler(
     name = "assembler",
     visibility = ["//visibility:public"],
-)
-
-stardoc(
-    name = "docs",
-    input = "defs.bzl",
-    out = "docs.md",
-    deps = [
-        "//nasm/private/rules:binary",
-        "//nasm/private/rules:library",
-        "//nasm/private/rules:test",
-    ],
 )

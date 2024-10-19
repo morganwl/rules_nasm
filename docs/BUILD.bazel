@@ -1,0 +1,12 @@
+load("@stardoc//stardoc:stardoc.bzl", "stardoc")
+
+stardoc(
+    name = "docs",
+    input = "//nasm:defs.bzl",
+    out = "docs.md",
+    deps = [
+        "//nasm/private/rules:binary",
+        "//nasm/private/rules:library",
+        "//nasm/private/rules:test",
+    ],
+)
