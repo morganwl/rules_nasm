@@ -51,3 +51,12 @@ nasm_binary(
         "@platforms//os:macos",
     ],
 )
+
+nasm_test(
+    name = "includes_test",
+    size = "small",
+    src = "includes_main.asm",
+    includes = [
+        "includes_inc.asm",
+    ],
+)

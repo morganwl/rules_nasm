@@ -4,10 +4,11 @@
 
 load(":library.bzl", "nasm_library")
 
-def nasm_binary(name, src, **kwargs):
+def nasm_binary(name, src, includes=None, **kwargs):
     nasm_library(
         name = name + "_lib",
         src = src,
+        includes = includes,
     )
 
     native.cc_binary(
