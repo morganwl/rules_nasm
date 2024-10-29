@@ -7,13 +7,14 @@
 def _nasm_library_impl(ctx):
     """Implement nasm library object."""
     src = ctx.file.src
-    inputs = depset([src])
+    inputs = depset([src], transitive=[depset(ctx.files.includes)])
     out = ctx.actions.declare_file(ctx.label.name + '.o')
 
     nasm_info = ctx.toolchains["//nasm:toolchain_type"]
 
     args = ctx.actions.args()
     args.add_all(nasm_info.args)
+    args.add("-I", src.dirname + "/")
     args.add("-o", out)
     args.add(src)
     ctx.actions.run(
@@ -31,11 +32,12 @@ _nasm_library_inner = rule(
     implementation = _nasm_library_impl,
     attrs = {
         "src": attr.label(allow_single_file = [".asm"]),
+        "includes": attr.label_list(allow_files = [".asm"]),
     },
     toolchains = ["//nasm:toolchain_type"],
 )
 
-def nasm_library(name, src, **kwargs):
+def nasm_library(name, src, includes = None, **kwargs):
     """Wrap nasm_library with a CC provider.
 
     Assembled object files should be usable as C compilation units.
@@ -46,6 +48,7 @@ def nasm_library(name, src, **kwargs):
     _nasm_library_inner(
         name = "%s_asm"%name,
         src = src,
+        includes = includes,
     )
 
     native.cc_library(
