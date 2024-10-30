@@ -2,12 +2,13 @@
 
 """Rules for assembling object files."""
 
-# load("@rules_cc//cc:defs.bzl", "cc_library")
+NASM_EXTENSIONS = [".asm", ".nasm", ".s", ".i"]
 
 def _nasm_library_impl(ctx):
     """Implement nasm library object."""
     src = ctx.file.src
-    inputs = depset([src], transitive=[depset(ctx.files.includes)])
+    preincs = ctx.files.preincs
+    inputs = depset([src] + preincs, transitive=[depset(ctx.files.hdrs)])
     out = ctx.actions.declare_file(ctx.label.name + '.o')
 
     nasm_info = ctx.toolchains["//nasm:toolchain_type"]
@@ -16,6 +17,7 @@ def _nasm_library_impl(ctx):
     args.add_all(nasm_info.args)
     args.add("-I", src.dirname + "/")
     args.add("-o", out)
+    args.add_all(preincs, before_each="-p")
     args.add(src)
     ctx.actions.run(
         mnemonic = "NasmAssemble",
@@ -31,13 +33,14 @@ def _nasm_library_impl(ctx):
 _nasm_library_inner = rule(
     implementation = _nasm_library_impl,
     attrs = {
-        "src": attr.label(allow_single_file = [".asm"]),
-        "includes": attr.label_list(allow_files = [".asm"]),
+        "src": attr.label(allow_single_file = NASM_EXTENSIONS),
+        "hdrs": attr.label_list(allow_files = NASM_EXTENSIONS),
+        "preincs": attr.label_list(allow_files = NASM_EXTENSIONS),
     },
     toolchains = ["//nasm:toolchain_type"],
 )
 
-def nasm_library(name, src, includes = None, **kwargs):
+def nasm_library(name, src, hdrs=None, preincs=None, **kwargs):
     """Wrap nasm_library with a CC provider.
 
     Assembled object files should be usable as C compilation units.
@@ -48,7 +51,8 @@ def nasm_library(name, src, includes = None, **kwargs):
     _nasm_library_inner(
         name = "%s_asm"%name,
         src = src,
-        includes = includes,
+        hdrs = hdrs,
+        preincs = preincs,
     )
 
     native.cc_library(
