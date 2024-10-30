@@ -56,7 +56,16 @@ nasm_test(
     name = "includes_test",
     size = "small",
     src = "includes_main.asm",
-    includes = [
+    hdrs = [
         "includes_inc.asm",
+    ],
+)
+
+nasm_test(
+    name = "preincludes_test",
+    size = "small",
+    src = "preincs_main.asm",
+    preincs = [
+        "includes_inc.asm"
     ],
 )
