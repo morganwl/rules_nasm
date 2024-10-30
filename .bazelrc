@@ -1,4 +1,4 @@
-import %workspace%/remote.bazelrc
+# import %workspace%/remote.bazelrc
 
 test --extra_toolchains @nasm_test_toolchains//:all
 test --test_output=errors
