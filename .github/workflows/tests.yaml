@@ -41,4 +41,5 @@ jobs:
         env:
           USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
         run:
+          ln -s ${GITHUB_WORKSPACE}/remote.bazelrc .
           bazel --bazelrc=${GITHUB_WORKSPACE}/.github/workflows/ci.bazelrc test //... --google_credentials="${{ steps.auth.outputs.credentials_file_path }}" --${{ matrix.bzlmod }}
