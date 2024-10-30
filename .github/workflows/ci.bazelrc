@@ -1,1 +1,1 @@
-import ../../remote.bazelrc
+import %workspace%/remote.bazelrc
