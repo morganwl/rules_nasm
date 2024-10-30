@@ -35,7 +35,7 @@ jobs:
           uname -a
           bazel query --output=build "@platforms//host:host"
           bazel mod show_extension rules_nasm//nasm:extensions.bzl%nasm
-          bazel --bazelrc=${GITHUB_WORKSPACE}/.github/workflows/ci.bazelrc test //... --google_credentials="${{ steps.auth.outputs.credentials_file_path }}" --${{ matrix.bzlmod }} --bazelrc=${GITHUB_WORKSPACE}/.github/workflows/ci.bazelrc
+          bazel --bazelrc=${GITHUB_WORKSPACE}/.github/workflows/ci.bazelrc test //... --google_credentials="${{ steps.auth.outputs.credentials_file_path }}" --${{ matrix.bzlmod }}
       - name: Smoke
         working-directory: e2e/smoke
         env:
