@@ -8,6 +8,10 @@ def _nasm_library_impl(ctx):
     """Implement nasm library object."""
     src = ctx.file.src
     preincs = ctx.files.preincs
+    workspace_root = ctx.file.src.owner.workspace_root
+    if workspace_root:
+        workspace_root = workspace_root + "/"
+    package_path = workspace_root + ctx.file.src.owner.package
     inputs = depset([src] + preincs, transitive=[depset(ctx.files.hdrs)])
     out = ctx.actions.declare_file(ctx.label.name + '.o')
 
@@ -18,7 +22,7 @@ def _nasm_library_impl(ctx):
     args.add("-I", src.dirname + "/")
     args.add_all(
         [
-            "%s/%s"%(src.dirname, inc)
+            "%s/%s"%(package_path, inc)
             for inc in ctx.attr.includes
         ],
         before_each="-I")
