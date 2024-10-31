@@ -69,3 +69,18 @@ nasm_test(
         "includes_inc.asm"
     ],
 )
+
+# genrule(
+#     name = "inc_dir",
+#     srcs = [],
+#     outs = ["includes"],
+#     cmd = "mkdir $@",
+# )
+
+nasm_test(
+    name = "includes_path_test",
+    size = "small",
+    src = "includes_main.asm",
+    hdrs = ["includes/includes_inc.asm"],
+    includes = ["includes"],
+)
