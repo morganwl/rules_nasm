@@ -9,7 +9,7 @@ Public rules definitions for nasm.
 <pre>
 load("@rules_nasm//nasm:defs.bzl", "nasm_binary")
 
-nasm_binary(<a href="#nasm_binary-name">name</a>, <a href="#nasm_binary-src">src</a>, <a href="#nasm_binary-hdrs">hdrs</a>, <a href="#nasm_binary-preincs">preincs</a>, <a href="#nasm_binary-kwargs">kwargs</a>)
+nasm_binary(<a href="#nasm_binary-name">name</a>, <a href="#nasm_binary-src">src</a>, <a href="#nasm_binary-hdrs">hdrs</a>, <a href="#nasm_binary-preincs">preincs</a>, <a href="#nasm_binary-includes">includes</a>, <a href="#nasm_binary-kwargs">kwargs</a>)
 </pre>
 
 
@@ -23,6 +23,7 @@ nasm_binary(<a href="#nasm_binary-name">name</a>, <a href="#nasm_binary-src">src
 | <a id="nasm_binary-src"></a>src |  <p align="center"> - </p>   |  none |
 | <a id="nasm_binary-hdrs"></a>hdrs |  <p align="center"> - </p>   |  `None` |
 | <a id="nasm_binary-preincs"></a>preincs |  <p align="center"> - </p>   |  `None` |
+| <a id="nasm_binary-includes"></a>includes |  <p align="center"> - </p>   |  `None` |
 | <a id="nasm_binary-kwargs"></a>kwargs |  <p align="center"> - </p>   |  none |
 
 
@@ -33,7 +34,7 @@ nasm_binary(<a href="#nasm_binary-name">name</a>, <a href="#nasm_binary-src">src
 <pre>
 load("@rules_nasm//nasm:defs.bzl", "nasm_library")
 
-nasm_library(<a href="#nasm_library-name">name</a>, <a href="#nasm_library-src">src</a>, <a href="#nasm_library-hdrs">hdrs</a>, <a href="#nasm_library-preincs">preincs</a>, <a href="#nasm_library-kwargs">kwargs</a>)
+nasm_library(<a href="#nasm_library-name">name</a>, <a href="#nasm_library-src">src</a>, <a href="#nasm_library-hdrs">hdrs</a>, <a href="#nasm_library-preincs">preincs</a>, <a href="#nasm_library-includes">includes</a>, <a href="#nasm_library-kwargs">kwargs</a>)
 </pre>
 
 Wrap nasm_library with a CC provider.
@@ -52,6 +53,7 @@ corresponding provider, and captures any additional dependencies.
 | <a id="nasm_library-src"></a>src |  <p align="center"> - </p>   |  none |
 | <a id="nasm_library-hdrs"></a>hdrs |  <p align="center"> - </p>   |  `None` |
 | <a id="nasm_library-preincs"></a>preincs |  <p align="center"> - </p>   |  `None` |
+| <a id="nasm_library-includes"></a>includes |  <p align="center"> - </p>   |  `None` |
 | <a id="nasm_library-kwargs"></a>kwargs |  <p align="center"> - </p>   |  none |
 
 
@@ -62,7 +64,7 @@ corresponding provider, and captures any additional dependencies.
 <pre>
 load("@rules_nasm//nasm:defs.bzl", "nasm_test")
 
-nasm_test(<a href="#nasm_test-name">name</a>, <a href="#nasm_test-src">src</a>, <a href="#nasm_test-size">size</a>, <a href="#nasm_test-hdrs">hdrs</a>, <a href="#nasm_test-preincs">preincs</a>, <a href="#nasm_test-kwargs">kwargs</a>)
+nasm_test(<a href="#nasm_test-name">name</a>, <a href="#nasm_test-src">src</a>, <a href="#nasm_test-size">size</a>, <a href="#nasm_test-hdrs">hdrs</a>, <a href="#nasm_test-preincs">preincs</a>, <a href="#nasm_test-includes">includes</a>, <a href="#nasm_test-kwargs">kwargs</a>)
 </pre>
 
 Assemble and execute a test assembly program.
@@ -77,6 +79,7 @@ Assemble and execute a test assembly program.
 | <a id="nasm_test-size"></a>size |  <p align="center"> - </p>   |  `None` |
 | <a id="nasm_test-hdrs"></a>hdrs |  <p align="center"> - </p>   |  `None` |
 | <a id="nasm_test-preincs"></a>preincs |  <p align="center"> - </p>   |  `None` |
+| <a id="nasm_test-includes"></a>includes |  <p align="center"> - </p>   |  `None` |
 | <a id="nasm_test-kwargs"></a>kwargs |  <p align="center"> - </p>   |  none |
 
 
