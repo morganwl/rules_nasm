@@ -20,6 +20,8 @@ def _nasm_library_impl(ctx):
     args = ctx.actions.args()
     args.add_all(nasm_info.args)
     args.add("-I", src.dirname + "/")
+    if workspace_root:
+        args.add("-I", workspace_root)
     args.add_all(
         [
             "%s/%s"%(package_path, inc)
