@@ -1,6 +1,6 @@
 # Copyright (c) 2024 Morgan Wajda-Levie.
 
-"""Public rules definitions for nasm."""
+"""Rules for `nasm`."""
 
 load("//nasm/private/rules:library.bzl", _nasm_library = "nasm_library")
 load("//nasm/private/rules:test.bzl", _nasm_test = "nasm_test")
