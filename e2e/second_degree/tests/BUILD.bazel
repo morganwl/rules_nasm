@@ -1,0 +1,8 @@
+cc_test(
+    name = "compsum_test",
+    size = "small",
+    srcs = ["compsum_test.c"],
+    deps = [
+        "//libcompsum:compsum",
+    ],
+)

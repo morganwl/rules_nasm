@@ -1,0 +1,10 @@
+cc_library(
+    name = "compsum",
+    hdrs = ["compsum.h"],
+    srcs = ["compsum.c"],
+    deps = [
+        "@rules_nasm_c_library//libadd:add",
+        "@rules_nasm_c_library//libeq:eq",
+    ],
+    visibility = ["//visibility:public"],
+)

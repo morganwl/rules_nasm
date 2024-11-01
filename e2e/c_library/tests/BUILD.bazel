@@ -1,0 +1,18 @@
+cc_test(
+    name = "add_test",
+    size = "small",
+    srcs = ["add_test.c"],
+    deps = [
+        "//libadd:add"
+    ],
+)
+
+cc_test(
+    name = "eq_test",
+    size = "small",
+    srcs = ["eq_test.c"],
+    deps = [
+        "//libeq:eq"
+    ],
+)
+

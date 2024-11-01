@@ -1,0 +1,20 @@
+"""Test integration of nasm sources into C library.
+
+This library is organized in an old-school C fashion, with a source
+directory mapped directly onto the repo root directory.
+"""
+
+module(
+    name = "rules_nasm_c_library",
+)
+
+bazel_dep(name = "rules_nasm", version = "0.0.0")
+bazel_dep(name = "platforms", version = "0.0.10")
+
+local_path_override(
+    module_name = "rules_nasm",
+    path = "../..",
+)
+
+nasm = use_extension("@rules_nasm//nasm:extensions.bzl", "nasm")
+nasm.toolchain(nasm_version = "2.16.03")
