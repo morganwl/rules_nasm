@@ -1,0 +1,8 @@
+cc_test(
+    name = "add_test",
+    size = "small",
+    srcs = ["add_test.c"],
+    deps = [
+        "//libadd:add"
+    ],
+)
