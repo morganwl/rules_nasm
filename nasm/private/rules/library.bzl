@@ -43,21 +43,51 @@ def _nasm_library_impl(ctx):
 _nasm_library_inner = rule(
     implementation = _nasm_library_impl,
     attrs = {
-        "src": attr.label(allow_single_file = NASM_EXTENSIONS),
-        "hdrs": attr.label_list(allow_files = NASM_EXTENSIONS),
-        "preincs": attr.label_list(allow_files = NASM_EXTENSIONS),
-        "includes": attr.string_list(),
+        "src": attr.label(
+            allow_single_file = NASM_EXTENSIONS,
+            doc = "The assembly source file. Must have an extension of %s."%(
+                ", ".join(NASM_EXTENSIONS)
+            )
+        ),
+        "hdrs": attr.label_list(
+            allow_files = NASM_EXTENSIONS,
+            doc = ("Other assembly sources which may be included by `src`. " +
+                   "Must have an extension of %s."%(
+                        ", ".join(NASM_EXTENSIONS)
+                   )
+            )
+        ),
+        "preincs": attr.label_list(
+            allow_files = NASM_EXTENSIONS,
+            doc = ("Assembly sources which will be included and processed before the source file. " +
+                   "Sources will be included in the order listed. Must have an extension of %s."%(
+                        ", ".join(NASM_EXTENSIONS)
+                   )
+            )
+        ),
+        "includes": attr.string_list(
+            doc = ("Directories which will be added to the search path for include files.")
+        ),
     },
     toolchains = ["//nasm:toolchain_type"],
 )
 
 def nasm_library(name, src, hdrs=None, preincs=None, includes=None, **kwargs):
-    """Wrap nasm_library with a CC provider.
+    """Assemble an `nasm` source for use as a C++ dependency.
 
     Assembled object files should be usable as C compilation units.
-    Rather than create a CcInfo object directly, we pass the assembled
-    object file as the src to a cc_library rule, which creates a
+    Rather than create a `CcInfo` object directly, we pass the assembled
+    object file as the src to a `cc_library` rule, which creates a
     corresponding provider, and captures any additional dependencies.
+
+    Args:
+      name: A unique name for this target.
+      src: The assembly source file.
+      hdrs: Other assembly sources which may be included by `src`.
+      preincs: Assembly sources which will be included and processed before the source file.
+               Sources will be included in the order listed.
+      includes: Directories which will be added to the search path for include files.
+      **kwargs: Additional keyword arguments passed to the `cc_library` rule.
     """
     _nasm_library_inner(
         name = "%s_asm"%name,
