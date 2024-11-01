@@ -20,3 +20,4 @@ jobs:
     uses: bazel-contrib/.github/.github/workflows/release_ruleset.yaml@v6
     with:
       release_files: rules_nasm-*.tar.gz
+      prerelease: false

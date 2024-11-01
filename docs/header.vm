@@ -1,0 +1,13 @@
+# Documentation for rules_nasm
+
+## Overview
+
+`nasm` is an assembler for the x86 architecture that recognizes a
+variant of Intel assembly syntax, as opposed to the AT&T syntax
+recognized by `gcc` and most other C compilers. `nasm` sources are
+sometimes included in open-source software, such as
+[ffmpeg](https://ffmpeg.org/).
+
+`rules_nasm` provides an idiomatically consistent interface for
+incorporating `nasm` sources into Bazel projects, although the current
+implementation is incomplete.
