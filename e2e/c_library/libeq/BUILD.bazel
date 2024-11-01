@@ -1,0 +1,22 @@
+load("@rules_nasm//nasm:defs.bzl", "nasm_library")
+
+cc_library(
+    name = "eq",
+    hdrs = ["eq.h"],
+    srcs = [
+        "eq.c",
+        "x86/eq_asm.h",
+    ],
+    deps = [
+        ":eq_x86",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+nasm_library(
+    name = "eq_x86",
+    src = "x86/eq_x86.asm",
+    hdrs = [
+        "//libadd:x86/x86util.asm",
+    ],
+)

@@ -6,3 +6,13 @@ cc_test(
         "//libadd:add"
     ],
 )
+
+cc_test(
+    name = "eq_test",
+    size = "small",
+    srcs = ["eq_test.c"],
+    deps = [
+        "//libeq:eq"
+    ],
+)
+

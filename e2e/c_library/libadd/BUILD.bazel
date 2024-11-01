@@ -1,5 +1,9 @@
 load("@rules_nasm//nasm:defs.bzl", "nasm_library")
 
+exports_files([
+    "x86/x86util.asm",
+])
+
 cc_library(
     name = "add",
     hdrs = ["add.h"],
