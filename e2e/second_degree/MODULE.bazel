@@ -1,0 +1,16 @@
+"""Test integration of nasm sources in dependent module."""
+
+module(
+    name = "rules_nasm_second_degree",
+)
+
+bazel_dep(name = "rules_nasm_c_library", version = "0.0.0")
+
+local_path_override(
+    module_name = "rules_nasm_c_library",
+    path = "../c_library",
+)
+local_path_override(
+    module_name = "rules_nasm",
+    path = "../..",
+)
