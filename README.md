@@ -8,6 +8,11 @@ Bazel.
 This is an early release, and is provided without assurances.
 Contributions, feedback, and bug reports are welcome.
 
+## Getting Started
+
+See the [release notes](https://github.com/morganwl/rules_nasm/releases)
+for getting started with the latest version.
+
 ## Why rules_nasm?
 
 An existing module, [nasm](https://registry.bazel.build/modules/nasm),
@@ -27,22 +32,6 @@ The following platforms are currently supported:
 - Linux x86-64
 - MacOS x86-64
 
-## Getting Started
-
-*(Support for projects not using `bzlmod` will be added in a future
-release.)*
-
-If you are using `bzlmod`, add the following to `MODULE.bazel`:
-
-```starlark
-bazel_dep(name = "rules_nasm", version = "0.1.0")
-
-# configure the toolchain
-nasm = use_extension("@rules_nasm//nasm:extensions.bzl", "nasm")
-nasm.toolchain(
-    nasm_version = "2.16.03",
-)
-```
 
 ## Usage
 
