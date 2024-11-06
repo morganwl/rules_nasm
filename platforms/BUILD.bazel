@@ -1,0 +1,61 @@
+load("@bazel_skylib//lib:selects.bzl", "selects")
+load("//nasm:defs.bzl", "cc_toolchain_config")
+
+package(default_visibility = ["//visibility:public"])
+
+filegroup(name = "empty")
+
+selects.config_setting_group(
+    name = "elf",
+    match_any = [
+        "@platforms//os:linux",
+    ],
+)
+
+platform(
+    name = "elf64",
+    constraint_values = [
+        ":elf",
+        "@platforms//cpu:x86_64",
+    ]
+)
+
+toolchain(
+    name = "cc-compiler-x86-gnu",
+    toolchain = ":cc-compiler-x86-gnu_toolchain",
+    toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
+    target_compatible_with = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
+    ],
+)
+
+cc_toolchain(
+    name = "cc-compiler-x86-gnu_toolchain",
+    toolchain_identifier = "cc-compiler-x86-gnu_toolchain",
+    toolchain_config = ":cc-compiler-x86-gnu_config",
+    all_files = ":empty",
+    compiler_files = ":empty",
+    dwp_files = ":empty",
+    linker_files = ":empty",
+    objcopy_files = ":empty",
+    strip_files = ":empty",
+    supports_param_files = 0,
+)
+
+cc_toolchain_config(
+    name = "cc-compiler-x86-gnu_config",
+    toolchain_identifier = "local",
+    host_system_name = "local",
+    target_system_name = "local",
+    compiler = "gcc",
+    tool_paths = {
+        "gcc": "/usr/bin/x86_64-linux-gnu-gcc-12",
+        "cpp": "/usr/bin/x86_64-linux-gnu-gcc-12",
+        "ld": "/usr/bin/x86_64-linux-gnu-gcc-ld-12",
+        "ar": "/usr/bin/x86_64-linux-gnu-gcc-ar-12",
+        "nm": "/usr/bin/x86_64-linux-gnu-gcc-nm-12",
+        "objdump": "/usr/bin/x86_64-linux-gnu-objdump",
+        "strip": "/usr/bin/x86_64-linux-gnu-strip",
+    },
+)

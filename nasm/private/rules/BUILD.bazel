@@ -17,3 +17,9 @@ bzl_library(
     srcs = ["test.bzl"],
     visibility = ["//:__subpackages__"],
 )
+
+bzl_library(
+    name = "cc_toolchain",
+    srcs = ["cc_toolchain.bzl"],
+    visibility = ["//:__subpackages__"],
+)
