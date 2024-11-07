@@ -1,0 +1,1 @@
+build --platforms @rules_nasm//platforms:elf64

@@ -53,6 +53,9 @@ toolchain(
     exec_compatible_with = [
         "@platforms//os:{os}",
     ],
+    target_compatible_with = [
+        "@platforms//cpu:x86_64",
+    ],
 )
     """.format(
         name = name,
