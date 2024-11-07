@@ -1,0 +1,7 @@
+load("@rules_nasm//nasm:defs.bzl", "nasm_binary")
+
+nasm_binary(
+    name = "hello",
+    src = "hello.asm",
+    hdrs = ["x86util.asm"],
+)
