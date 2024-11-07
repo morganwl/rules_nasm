@@ -27,17 +27,8 @@ cc_toolchain(
 
 cc_toolchain_config(
     name = "cc-compiler-x86-gnu_config",
-    toolchain_identifier = "local",
-    host_system_name = "local",
-    target_system_name = "local",
+    toolchain_identifier = "x86_64-gnu",
     compiler = "gcc",
-    tool_paths = {
-        "gcc": "/usr/bin/x86_64-linux-gnu-gcc-12",
-        "cpp": "/usr/bin/x86_64-linux-gnu-gcc-12",
-        "ld": "/usr/bin/x86_64-linux-gnu-ld",
-        "ar": "/usr/bin/x86_64-linux-gnu-ar",
-        "nm": "/usr/bin/x86_64-linux-gnu-nm",
-        "objdump": "/usr/bin/x86_64-linux-gnu-objdump",
-        "strip": "/usr/bin/x86_64-linux-gnu-strip",
-    },
+    compiler_version = "12",
+    toolchain_prefix = "/usr/bin/x86_64-linux-gnu",
 )
