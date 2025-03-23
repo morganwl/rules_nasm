@@ -13,12 +13,12 @@ def _nasm_toolchain_impl(ctx):
 nasm_toolchain = rule(
     implementation = _nasm_toolchain_impl,
     attrs = {
+        "args": attr.string_list(),
         "target": attr.label(
             cfg = "exec",
             allow_files = True,
             executable = True,
         ),
-        "args": attr.string_list(),
     },
 )
 
@@ -31,7 +31,7 @@ def _nasm_assembler_impl(ctx):
         is_executable = True,
     )
     return [
-        DefaultInfo(files = depset([symlink]))
+        DefaultInfo(files = depset([symlink])),
     ]
 
 nasm_assembler = rule(

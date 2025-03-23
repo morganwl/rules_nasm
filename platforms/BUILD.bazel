@@ -16,5 +16,5 @@ platform(
     constraint_values = [
         ":elf",
         "@platforms//cpu:x86_64",
-    ]
+    ],
 )

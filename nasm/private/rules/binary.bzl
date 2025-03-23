@@ -2,9 +2,10 @@
 
 """Rule for nasm binary targets."""
 
+load("@rules_cc//cc:cc_binary.bzl", "cc_binary")
 load(":library.bzl", "nasm_library")
 
-def nasm_binary(name, src, hdrs=None, preincs=None, includes=None, **kwargs):
+def nasm_binary(name, src, hdrs = None, preincs = None, includes = None, **kwargs):
     """Assemble a source file as an executable.
 
     Assembles an `nasm` source file as an executable binary. The
@@ -41,9 +42,8 @@ def nasm_binary(name, src, hdrs=None, preincs=None, includes=None, **kwargs):
         preincs = preincs,
         includes = includes,
     )
-
-    native.cc_binary(
+    cc_binary(
         name = name,
-        srcs = [":%s_lib"%name],
+        srcs = [":%s_lib" % name],
         **kwargs
     )

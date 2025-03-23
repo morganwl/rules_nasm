@@ -23,9 +23,11 @@ def nasm_declare_toolchain_repos(configurations, host_os):
 
 def canonical_name(version, source, os):
     """Get canonical name for toolchain repository."""
-    name = "%s_%s_%s"%(os, version, source)
+    name = "%s_%s_%s" % (os, version, source)
     return name.lower().replace(" ", "")
 
+# buildifier: disable=function-docstring-args
+# buildifier: disable=function-docstring-return
 def nasm_declare_repo(version, require_source, os):
     """Declare a nasm repository."""
     if os == "macos" and not require_source:
@@ -36,11 +38,13 @@ def nasm_declare_repo(version, require_source, os):
             return name
     url, checksum = nasm_get_url(version, "source")
     if checksum == None:
-        fail("No nasm release found for %s, %s."%(version, os))
+        fail("No nasm release found for %s, %s." % (version, os))
     name = canonical_name(version, "source", os)
     nasm_declare_repo_source(name, version, url, checksum)
     return name
 
+# buildifier: disable=function-docstring-args
+# buildifier: disable=function-docstring-return
 def nasm_define_toolchain(name):
     """Define a toolchain rule based on a toolchain name."""
     os = name.split("_")[0]
@@ -69,7 +73,7 @@ def _nasm_toolchains_impl(rctx):
     toolchains = [nasm_define_toolchain(tc) for tc in rctx.attr.toolchains]
     rctx.file(
         "BUILD.bazel",
-        "\n\n".join(toolchains)
+        "\n\n".join(toolchains),
     )
 
 nasm_toolchains = repository_rule(
@@ -77,10 +81,12 @@ nasm_toolchains = repository_rule(
     configure = True,
     local = True,
     attrs = {
-        "toolchains": attr.string_list()
+        "toolchains": attr.string_list(),
     },
 )
 
+# buildifier: disable=function-docstring-args
+# buildifier: disable=function-docstring-return
 def nasm_get_url(version, platform):
     """Get the URL and checksum for a version."""
     if platform == "macos":

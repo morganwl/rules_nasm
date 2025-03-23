@@ -43,3 +43,18 @@ jobs:
           e2e/test.sh --bazelrc=${GITHUB_WORKSPACE}/.github/workflows/ci.bazelrc
           --google_credentials="${{ steps.auth.outputs.credentials_file_path }}"
           --${{ matrix.bzlmod }}
+
+  formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: true
+      - name: Buildifier
+        run: |
+          wget "https://github.com/bazelbuild/buildtools/releases/download/v${BUILDIFIER_VERSION}/buildifier-linux-amd64" -O buildifier
+          chmod +x ./buildifier
+          ./buildifier -lint=warn -mode=check -warnings=all -r ${{ github.workspace }}
+          rm ./buildifier
+        env:
+          BUILDIFIER_VERSION: 8.0.2

@@ -1,3 +1,4 @@
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
 load("@rules_nasm//nasm:defs.bzl", "nasm_library")
 
 exports_files([
@@ -6,21 +7,21 @@ exports_files([
 
 cc_library(
     name = "add",
-    hdrs = ["add.h"],
     srcs = [
         "add.c",
         "x86/add_asm.h",
     ],
-    deps = [
-        "add_x86"
-    ],
+    hdrs = ["add.h"],
     visibility = ["//visibility:public"],
+    deps = [
+        "add_x86",
+    ],
 )
 
 nasm_library(
     name = "add_x86",
     src = "x86/add_x86.asm",
     hdrs = [
-        "x86/x86util.asm"
+        "x86/x86util.asm",
     ],
 )

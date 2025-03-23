@@ -2,9 +2,10 @@
 
 """Rule for nasm test targets."""
 
+load("@rules_cc//cc:cc_test.bzl", "cc_test")
 load(":library.bzl", "nasm_library")
 
-def nasm_test(name, src, size=None, hdrs=None, preincs=None, includes=None, **kwargs):
+def nasm_test(name, src, size = None, hdrs = None, preincs = None, includes = None, **kwargs):
     """Assemble and execute a test assembly program.
 
     Args:
@@ -28,10 +29,9 @@ def nasm_test(name, src, size=None, hdrs=None, preincs=None, includes=None, **kw
         preincs = preincs,
         includes = includes,
     )
-
-    native.cc_test(
+    cc_test(
         name = name,
         size = size,
-        srcs = [":%s_lib"%name],
+        srcs = [":%s_lib" % name],
         **kwargs
     )

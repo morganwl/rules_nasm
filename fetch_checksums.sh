@@ -35,6 +35,7 @@ if [ -n "$1" ]; then
 fi
 versions=( $(curl -L https://www.nasm.us/pub/nasm/releasebuilds/ --stderr - | grep -P '(?<=href=")\d+\.\d+\.\d+(rc\d+)?' -o) )
 
+echo "# buildifier: disable=module-docstring"
 echo "NASM_URLS = {"
 
 for v in "${versions[@]}"; do

@@ -1,9 +1,11 @@
+load("@rules_cc//cc:cc_test.bzl", "cc_test")
+
 cc_test(
     name = "add_test",
     size = "small",
     srcs = ["add_test.c"],
     deps = [
-        "//libadd:add"
+        "//libadd:add",
     ],
 )
 
@@ -12,7 +14,6 @@ cc_test(
     size = "small",
     srcs = ["eq_test.c"],
     deps = [
-        "//libeq:eq"
+        "//libeq:eq",
     ],
 )
-
