@@ -1,16 +1,17 @@
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
 load("@rules_nasm//nasm:defs.bzl", "nasm_library")
 
 cc_library(
     name = "eq",
-    hdrs = ["eq.h"],
     srcs = [
         "eq.c",
         "x86/eq_asm.h",
     ],
+    hdrs = ["eq.h"],
+    visibility = ["//visibility:public"],
     deps = [
         ":eq_x86",
     ],
-    visibility = ["//visibility:public"],
 )
 
 nasm_library(

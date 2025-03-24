@@ -6,7 +6,7 @@
 load("//nasm:toolchains.bzl", "nasm_declare_toolchain_repos", "nasm_toolchains")
 
 OS_MAP = {
-    'mac os x': 'macos',
+    "mac os x": "macos",
 }
 
 _toolchain = tag_class(
@@ -23,8 +23,8 @@ _toolchain = tag_class(
         "_repo_name": attr.string(
             doc = ("Name of repo where toolchains will be registered. For internal use."),
             default = "nasm_toolchains",
-        )
-    }
+        ),
+    },
 )
 
 def get_unique_toolchain_tags(module_ctx):
@@ -51,9 +51,7 @@ def map_os(java_os):
 
 def _nasm_impl(module_ctx):
     host_os = map_os(module_ctx.os.name)
-    print(host_os)
     configurations = get_unique_toolchain_tags(module_ctx)
-    print(configurations)
     repo_names = nasm_declare_toolchain_repos(configurations, host_os)
     configuration_groups = {"nasm_toolchains": []}
     for configuration, groups in configurations.items():
@@ -64,7 +62,7 @@ def _nasm_impl(module_ctx):
     for name, toolchains in configuration_groups.items():
         nasm_toolchains(
             name = name,
-            toolchains = toolchains
+            toolchains = toolchains,
         )
 
 nasm = module_extension(

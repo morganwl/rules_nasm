@@ -1,7 +1,9 @@
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+
 sh_test(
     name = "get_nasm_tool_test",
     size = "small",
+    srcs = ["get_nasm_tool_test.sh"],
+    data = ["@rules_nasm//nasm:assembler"],
     env = {"NASM": "$(rootpath @rules_nasm//nasm:assembler)"},
-    srcs = ["get_nasm_tool_test.sh",],
-    data = ["@rules_nasm//nasm:assembler"]
 )

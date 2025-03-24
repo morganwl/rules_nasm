@@ -1,7 +1,8 @@
 # Copyright (c) 2024 Morgan Wajda-Levie.
 
-load("@rules_nasm//nasm:defs.bzl", "nasm_test", "nasm_library", "nasm_binary")
-
+load("@rules_cc//cc:cc_test.bzl", "cc_test")
+load("@rules_nasm//nasm:defs.bzl", "nasm_binary", "nasm_library", "nasm_test")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
 
 nasm_test(
     name = "nasm_test_test",
@@ -33,7 +34,7 @@ sh_test(
     srcs = select({
         "@platforms//os:linux": [":nasm_executable"],
         "@platforms//os:macos": [":nasm_executable_mac"],
-    })
+    }),
 )
 
 nasm_binary(
@@ -66,7 +67,7 @@ nasm_test(
     size = "small",
     src = "preincs_main.asm",
     preincs = [
-        "includes_inc.asm"
+        "includes_inc.asm",
     ],
 )
 

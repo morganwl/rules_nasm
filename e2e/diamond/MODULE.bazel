@@ -3,7 +3,7 @@ module(
 )
 
 bazel_dep(name = "rules_nasm", version = "0.1.0")
-bazel_dep(name = "rules_nasm_smoke",)
+bazel_dep(name = "rules_nasm_smoke")
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "platforms", version = "0.0.10")
 
@@ -11,6 +11,7 @@ local_path_override(
     module_name = "rules_nasm",
     path = "../..",
 )
+
 local_path_override(
     module_name = "rules_nasm_smoke",
     path = "../smoke",

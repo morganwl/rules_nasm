@@ -1,17 +1,20 @@
-toolchain_type(name = "toolchain_type", visibility = ["//visibility:public"])
-
-load("//nasm:nasm_toolchain.bzl", "nasm_assembler")
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("//nasm:nasm_toolchain.bzl", "nasm_assembler")
+
+toolchain_type(
+    name = "toolchain_type",
+    visibility = ["//visibility:public"],
+)
 
 bzl_library(
     name = "defs",
     srcs = ["defs.bzl"],
+    visibility = ["//:__subpackages__"],
     deps = [
         "//nasm/private/rules:binary",
         "//nasm/private/rules:library",
         "//nasm/private/rules:test",
     ],
-    visibility = ["//:__subpackages__"],
 )
 
 exports_files([
