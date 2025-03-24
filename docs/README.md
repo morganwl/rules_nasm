@@ -18,7 +18,7 @@ implementation is incomplete.
 <pre>
 load("@rules_nasm//nasm:defs.bzl", "nasm_binary")
 
-nasm_binary(<a href="#nasm_binary-name">name</a>, <a href="#nasm_binary-src">src</a>, <a href="#nasm_binary-hdrs">hdrs</a>, <a href="#nasm_binary-preincs">preincs</a>, <a href="#nasm_binary-includes">includes</a>, <a href="#nasm_binary-kwargs">kwargs</a>)
+nasm_binary(<a href="#nasm_binary-name">name</a>, <a href="#nasm_binary-src">src</a>, <a href="#nasm_binary-hdrs">hdrs</a>, <a href="#nasm_binary-preincs">preincs</a>, <a href="#nasm_binary-includes">includes</a>, <a href="#nasm_binary-kwargs">**kwargs</a>)
 </pre>
 
 Assemble a source file as an executable.
@@ -59,7 +59,7 @@ inspecting the target binary format.
 <pre>
 load("@rules_nasm//nasm:defs.bzl", "nasm_library")
 
-nasm_library(<a href="#nasm_library-name">name</a>, <a href="#nasm_library-src">src</a>, <a href="#nasm_library-hdrs">hdrs</a>, <a href="#nasm_library-preincs">preincs</a>, <a href="#nasm_library-includes">includes</a>, <a href="#nasm_library-kwargs">kwargs</a>)
+nasm_library(<a href="#nasm_library-name">name</a>, <a href="#nasm_library-src">src</a>, <a href="#nasm_library-hdrs">hdrs</a>, <a href="#nasm_library-preincs">preincs</a>, <a href="#nasm_library-includes">includes</a>, <a href="#nasm_library-kwargs">**kwargs</a>)
 </pre>
 
 Assemble an `nasm` source for use as a C++ dependency.
@@ -90,7 +90,7 @@ corresponding provider, and captures any additional dependencies.
 <pre>
 load("@rules_nasm//nasm:defs.bzl", "nasm_test")
 
-nasm_test(<a href="#nasm_test-name">name</a>, <a href="#nasm_test-src">src</a>, <a href="#nasm_test-size">size</a>, <a href="#nasm_test-hdrs">hdrs</a>, <a href="#nasm_test-preincs">preincs</a>, <a href="#nasm_test-includes">includes</a>, <a href="#nasm_test-kwargs">kwargs</a>)
+nasm_test(<a href="#nasm_test-name">name</a>, <a href="#nasm_test-src">src</a>, <a href="#nasm_test-size">size</a>, <a href="#nasm_test-hdrs">hdrs</a>, <a href="#nasm_test-preincs">preincs</a>, <a href="#nasm_test-includes">includes</a>, <a href="#nasm_test-kwargs">**kwargs</a>)
 </pre>
 
 Assemble and execute a test assembly program.
@@ -107,5 +107,3 @@ Assemble and execute a test assembly program.
 | <a id="nasm_test-preincs"></a>preincs |  Assembly sources which will be included and processed before the source file. Sources will be included in the order listed.   |  `None` |
 | <a id="nasm_test-includes"></a>includes |  Directories which will be added to the search path for include files.   |  `None` |
 | <a id="nasm_test-kwargs"></a>kwargs |  Additional keyword arguments passed to the `cc_test` rule.   |  none |
-
-
