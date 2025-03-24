@@ -18,11 +18,8 @@ fi
 for d in $(ls); do
     if [[ -d "$d" ]]; then
         cd "$d"
-        rm remote.bazelrc 2> /dev/null || true
-        ln -s "$(git rev-parse --show-toplevel)/remote.bazelrc" remote.bazelrc
         echo "TEST: bazel test //... ${@}"
         bazel $bazelrc test //... "${@}"
-        rm remote.bazelrc
         cd ..
     fi
 done

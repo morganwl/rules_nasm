@@ -30,13 +30,11 @@ jobs:
         env:
           USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
         run:
-          bazel
-          --bazelrc=${GITHUB_WORKSPACE}/.github/workflows/ci.bazelrc test
-          //tests/...
+          bazel test //tests/...
           --${{ matrix.bzlmod }}
       - name: e2e
         env:
           USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
         run:
-          e2e/test.sh --bazelrc=${GITHUB_WORKSPACE}/.github/workflows/ci.bazelrc
+          e2e/test.sh
           --${{ matrix.bzlmod }}
