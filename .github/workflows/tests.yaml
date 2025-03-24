@@ -29,11 +29,11 @@ jobs:
       - name: Unit
         env:
           USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
-        run: |
-          uname -a
-          bazel query --output=build "@platforms//host:host"
-          bazel mod show_extension rules_nasm//nasm:extensions.bzl%nasm
-          bazel --bazelrc=${GITHUB_WORKSPACE}/.github/workflows/ci.bazelrc test //... --${{ matrix.bzlmod }}
+        run:
+          bazel
+          --bazelrc=${GITHUB_WORKSPACE}/.github/workflows/ci.bazelrc test
+          //tests/...
+          --${{ matrix.bzlmod }}
       - name: e2e
         env:
           USE_BAZEL_VERSION: ${{ matrix.bazel_version }}

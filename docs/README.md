@@ -107,5 +107,3 @@ Assemble and execute a test assembly program.
 | <a id="nasm_test-preincs"></a>preincs |  Assembly sources which will be included and processed before the source file. Sources will be included in the order listed.   |  `None` |
 | <a id="nasm_test-includes"></a>includes |  Directories which will be added to the search path for include files.   |  `None` |
 | <a id="nasm_test-kwargs"></a>kwargs |  Additional keyword arguments passed to the `cc_test` rule.   |  none |
-
-
