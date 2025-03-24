@@ -1,4 +1,9 @@
 # import %workspace%/remote.bazelrc
 
-test --extra_toolchains @nasm_test_toolchains//:all
 test --test_output=errors
+
+# https://github.com/bazelbuild/bazel/issues/8195
+build --incompatible_disallow_empty_glob=true
+
+# https://github.com/bazelbuild/bazel/issues/12821
+build --nolegacy_external_runfiles

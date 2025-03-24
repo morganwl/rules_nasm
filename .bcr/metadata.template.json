@@ -1,0 +1,15 @@
+{
+  "homepage": "https://github.com/morganwl/rules_nasm",
+  "maintainers": [
+    {
+      "github": "morganwl",
+      "email": "48608155+morganwl@users.noreply.github.com",
+      "name": "Morgan Wajda-Levie"
+    }
+  ],
+  "repository": [
+    "github:morganwl/rules_nasm"
+  ],
+  "versions": [],
+  "yanked_versions": {}
+}

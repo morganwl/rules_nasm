@@ -1,0 +1,19 @@
+load("//nasm:defs.bzl", "nasm_toolchain")
+
+nasm_toolchain(
+    name = "nasm_toolchain",
+    copts = select({
+        "//nasm:elf64": ["-felf64"],
+        "//nasm:macho64": ["-fmacho64"],
+        "//conditions:default": [],
+    }),
+    nasm = "@nasm",
+    visibility = ["//visibility:public"],
+)
+
+toolchain(
+    name = "toolchain",
+    toolchain = ":nasm_toolchain",
+    toolchain_type = "//nasm:toolchain_type",
+    visibility = ["//visibility:public"],
+)
