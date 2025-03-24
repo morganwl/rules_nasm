@@ -9,9 +9,9 @@ bazel_dep(name = "nasm", version = "2.16.03")
 bazel_dep(name = "platforms", version = "0.0.11")
 bazel_dep(name = "rules_cc", version = "0.1.1")
 
+bazel_dep(name = "protobuf", version = "29.0", dev_dependency = True, repo_name = "com_google_protobuf")
+bazel_dep(name = "rules_rust_mdbook", version = "0.59.1", dev_dependency = True)
 bazel_dep(name = "rules_shell", version = "0.3.0", dev_dependency = True)
 bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)
-bazel_dep(name = "protobuf", version = "29.0", dev_dependency = True, repo_name = "com_google_protobuf")
-bazel_dep(name = "aspect_bazel_lib", version = "2.9.3", dev_dependency = True)
 
 register_toolchains("//nasm/toolchain")

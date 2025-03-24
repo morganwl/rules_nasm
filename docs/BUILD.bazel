@@ -1,11 +1,37 @@
-load("@aspect_bazel_lib//lib:docs.bzl", "stardoc_with_diff_test", "update_docs")
+load("@rules_rust_mdbook//:defs.bzl", "mdbook", "mdbook_server")
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+load("@stardoc//stardoc:stardoc.bzl", "stardoc")
 
-stardoc_with_diff_test(
-    name = "README",
-    bzl_library_target = "//nasm:defs",
+stardoc(
+    name = "index",
+    out = "src/index.md",
     header_template = "header.vm",
+    input = "//nasm:defs.bzl",
+    table_of_contents_template = "@stardoc//stardoc:templates/markdown_tables/table_of_contents.vm",
+    deps = ["//nasm:defs"],
 )
 
-update_docs(
-    name = "update",
+mdbook(
+    name = "book",
+    srcs = glob(["src/**/*.md"]) + [
+        ":index",
+    ],
+    book = "book.toml",
+)
+
+alias(
+    name = "docs",
+    actual = ":book",
+)
+
+mdbook_server(
+    name = "server",
+    book = ":book",
+)
+
+sh_binary(
+    name = "publish_book",
+    srcs = ["publish_book.sh"],
+    data = [":book"],
+    env = {"BOOK_DIR": "$(rootpath :book)"},
 )
