@@ -2,10 +2,11 @@ module(
     name = "rules_bazel_diamond",
 )
 
-bazel_dep(name = "rules_nasm", version = "0.1.0")
+bazel_dep(name = "rules_nasm", version = "0.0.0")
 bazel_dep(name = "rules_nasm_smoke")
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
-bazel_dep(name = "platforms", version = "0.0.10")
+bazel_dep(name = "platforms", version = "0.0.11")
+bazel_dep(name = "rules_cc", version = "0.1.1")
 
 local_path_override(
     module_name = "rules_nasm",
@@ -17,5 +18,4 @@ local_path_override(
     path = "../smoke",
 )
 
-nasm = use_extension("@rules_nasm//nasm:extensions.bzl", "nasm")
-nasm.toolchain(nasm_version = "2.15.04")
+register_toolchains("@rules_nasm//nasm/toolchain")

@@ -17,5 +17,4 @@ local_path_override(
     path = "../..",
 )
 
-nasm = use_extension("@rules_nasm//nasm:extensions.bzl", "nasm")
-nasm.toolchain(nasm_version = "2.16.03")
+register_toolchains("@rules_nasm//nasm/toolchain")

@@ -1,5 +1,5 @@
 load("@rules_cc//cc:cc_library.bzl", "cc_library")
-load("@rules_nasm//nasm:defs.bzl", "nasm_library")
+load("@rules_nasm//nasm:defs.bzl", "nasm_cc_library")
 
 cc_library(
     name = "eq",
@@ -14,9 +14,9 @@ cc_library(
     ],
 )
 
-nasm_library(
+nasm_cc_library(
     name = "eq_x86",
-    src = "x86/eq_x86.asm",
+    srcs = ["x86/eq_x86.asm"],
     hdrs = [
         "//libadd:x86/x86util.asm",
     ],

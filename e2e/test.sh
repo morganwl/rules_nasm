@@ -17,8 +17,8 @@ fi
 
 for d in $(ls); do
     if [[ -d "$d" ]]; then
-        echo "$d"
         cd "$d"
+        echo "$d"
         echo "TEST: bazel test //... ${@}"
         bazel $bazelrc test //... "${@}"
         cd ..
