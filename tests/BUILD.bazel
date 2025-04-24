@@ -1,15 +1,15 @@
 # Copyright (c) 2024 Morgan Wajda-Levie.
 
 load("@rules_cc//cc:cc_test.bzl", "cc_test")
-load("@rules_nasm//nasm:defs.bzl", "nasm_binary", "nasm_library", "nasm_test")
+load("@rules_nasm//nasm:defs.bzl", "nasm_cc_binary", "nasm_cc_library", "nasm_cc_test")
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
 
-nasm_test(
+nasm_cc_test(
     name = "nasm_test_test",
     size = "small",
-    src = select({
-        "@platforms//os:linux": "always_succeed_main.asm",
-        "@platforms//os:macos": "always_succeed_main_mac.asm",
+    srcs = select({
+        "@platforms//os:linux": ["always_succeed_main.asm"],
+        "@platforms//os:macos": ["always_succeed_main_mac.asm"],
     }),
 )
 
@@ -20,11 +20,11 @@ cc_test(
     deps = [":nasm_component"],
 )
 
-nasm_library(
+nasm_cc_library(
     name = "nasm_component",
-    src = select({
-        "@platforms//os:linux": "nasm_component_test.asm",
-        "@platforms//os:macos": "nasm_component_test_mac.asm",
+    srcs = select({
+        "@platforms//os:linux": ["nasm_component_test.asm"],
+        "@platforms//os:macos": ["nasm_component_test_mac.asm"],
     }),
 )
 
@@ -37,51 +37,44 @@ sh_test(
     }),
 )
 
-nasm_binary(
+nasm_cc_binary(
     name = "nasm_executable",
-    src = "always_succeed_main.asm",
+    srcs = ["always_succeed_main.asm"],
     target_compatible_with = [
         "@platforms//os:linux",
     ],
 )
 
-nasm_binary(
+nasm_cc_binary(
     name = "nasm_executable_mac",
-    src = "always_succeed_main_mac.asm",
+    srcs = ["always_succeed_main_mac.asm"],
     target_compatible_with = [
         "@platforms//os:macos",
     ],
 )
 
-nasm_test(
+nasm_cc_test(
     name = "includes_test",
     size = "small",
-    src = "includes_main.asm",
+    srcs = ["includes_main.asm"],
     hdrs = [
         "includes_inc.asm",
     ],
 )
 
-nasm_test(
+nasm_cc_test(
     name = "preincludes_test",
     size = "small",
-    src = "preincs_main.asm",
+    srcs = ["preincs_main.asm"],
     preincs = [
         "includes_inc.asm",
     ],
 )
 
-# genrule(
-#     name = "inc_dir",
-#     srcs = [],
-#     outs = ["includes"],
-#     cmd = "mkdir $@",
-# )
-
-nasm_test(
+nasm_cc_test(
     name = "includes_path_test",
     size = "small",
-    src = "includes_main.asm",
+    srcs = ["includes_main.asm"],
     hdrs = ["includes/includes_inc.asm"],
     includes = ["includes"],
 )

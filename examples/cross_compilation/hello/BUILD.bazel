@@ -1,7 +1,7 @@
-load("@rules_nasm//nasm:defs.bzl", "nasm_binary")
+load("@rules_nasm//nasm:defs.bzl", "nasm_cc_binary")
 
-nasm_binary(
+nasm_cc_binary(
     name = "hello",
-    src = "hello.asm",
+    srcs = ["hello.asm"],
     hdrs = ["x86util.asm"],
 )

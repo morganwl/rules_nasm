@@ -1,5 +1,5 @@
 load("@rules_cc//cc:cc_library.bzl", "cc_library")
-load("@rules_nasm//nasm:defs.bzl", "nasm_library")
+load("@rules_nasm//nasm:defs.bzl", "nasm_cc_library")
 
 exports_files([
     "x86/x86util.asm",
@@ -18,9 +18,9 @@ cc_library(
     ],
 )
 
-nasm_library(
+nasm_cc_library(
     name = "add_x86",
-    src = "x86/add_x86.asm",
+    srcs = ["x86/add_x86.asm"],
     hdrs = [
         "x86/x86util.asm",
     ],
