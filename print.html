@@ -1,0 +1,364 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>rules_nasm</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">rules_nasm</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/morganwl/rules_nasm" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated with Stardoc: http://skydoc.bazel.build -->
+<h1 id="rules_nasm"><a class="header" href="#rules_nasm">rules_nasm</a></h1>
+<p><code>nasm</code> is an assembler for the x86 architecture that recognizes a
+variant of Intel assembly syntax, as opposed to the AT&amp;T syntax
+recognized by <code>gcc</code> and most other C compilers. <code>nasm</code> sources are
+sometimes included in open-source software, such as
+<a href="https://ffmpeg.org/">ffmpeg</a>.</p>
+<p><code>rules_nasm</code> provides an idiomatically consistent interface for
+incorporating <code>nasm</code> sources into Bazel projects, although the current
+implementation is incomplete.</p>
+<h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
+<p>Add the following snippet to your <code>MODULE.bazel</code> file:</p>
+<pre><code class="language-python">bazel_dep(name = "rules_nasm", version = "{SEE_RELEASES}")
+
+register_toolchains(
+    "@rules_nasm//nasm/toolchain",
+)
+</code></pre>
+<p>Note that toolchain registration can be updated to point to a custom toolchain
+if users wish to have full control over the version of nasm used in different
+configurations. See <a href="index.html#nasm_toolchain">nasm_toolchain</a> for more details on defining
+toolchains.</p>
+<h2 id="rules"><a class="header" href="#rules">Rules</a></h2>
+<ul>
+<li><a href="index.html#nasm_library">nasm_library</a></li>
+<li><a href="index.html#nasm_toolchain">nasm_toolchain</a></li>
+</ul>
+<h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
+<ul>
+<li><a href="index.html#nasm_cc_binary">nasm_cc_binary</a></li>
+<li><a href="index.html#nasm_cc_library">nasm_cc_library</a></li>
+<li><a href="index.html#nasm_cc_test">nasm_cc_test</a></li>
+</ul>
+<p><a id="nasm_library"></a></p>
+<h2 id="nasm_library"><a class="header" href="#nasm_library">nasm_library</a></h2>
+<pre>
+load("@rules_nasm//nasm:defs.bzl", "nasm_library")
+
+nasm_library(<a href="index.html#nasm_library-name">name</a>, <a href="index.html#nasm_library-srcs">srcs</a>, <a href="index.html#nasm_library-hdrs">hdrs</a>, <a href="index.html#nasm_library-copts">copts</a>, <a href="index.html#nasm_library-includes">includes</a>, <a href="index.html#nasm_library-preincs">preincs</a>)
+</pre>
+<p>Assemble an <code>nasm</code> source for use as a C++ dependency.</p>
+<p><strong>ATTRIBUTES</strong></p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Name</th><th style="text-align: left">Description</th><th style="text-align: left">Type</th><th style="text-align: left">Mandatory</th><th style="text-align: left">Default</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a id="nasm_library-name"></a>name</td><td style="text-align: left">A unique name for this target.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels#target-names">Name</a></td><td style="text-align: left">required</td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a id="nasm_library-srcs"></a>srcs</td><td style="text-align: left">The assembly source file. Must have an extension of .asm, .nasm, .s, .i.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels">List of labels</a></td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
+<tr><td style="text-align: left"><a id="nasm_library-hdrs"></a>hdrs</td><td style="text-align: left">Other assembly sources which may be included by <code>src</code>. Must have an extension of .asm, .nasm, .s, .i.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels">List of labels</a></td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
+<tr><td style="text-align: left"><a id="nasm_library-copts"></a>copts</td><td style="text-align: left">Additional compilation flags to <code>nasm</code>.</td><td style="text-align: left">List of strings</td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
+<tr><td style="text-align: left"><a id="nasm_library-includes"></a>includes</td><td style="text-align: left">Directories which will be added to the search path for include files.</td><td style="text-align: left">List of strings</td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
+<tr><td style="text-align: left"><a id="nasm_library-preincs"></a>preincs</td><td style="text-align: left">Assembly sources which will be included and processed before the source file. Sources will be included in the order listed. Must have an extension of .asm, .nasm, .s, .i.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels">List of labels</a></td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
+</tbody></table>
+</div>
+<p><a id="nasm_toolchain"></a></p>
+<h2 id="nasm_toolchain"><a class="header" href="#nasm_toolchain">nasm_toolchain</a></h2>
+<pre>
+load("@rules_nasm//nasm:defs.bzl", "nasm_toolchain")
+
+nasm_toolchain(<a href="index.html#nasm_toolchain-name">name</a>, <a href="index.html#nasm_toolchain-copts">copts</a>, <a href="index.html#nasm_toolchain-nasm">nasm</a>)
+</pre>
+<p>A toolchain for configuring <code>nasm</code> rules.</p>
+<p>A toolchain can be defined by adding a snippet like the following
+somewhere in a <code>BUILD.bazel</code> file within your workspace.</p>
+<pre><code class="language-python">load("@rules_nasm//nasm:defs.bzl", "nasm_toolchain")
+
+nasm_toolchain(
+    name = "nasm_toolchain",
+    copts = select({
+        "//nasm:elf64": ["-felf64"],
+        "//nasm:macho64": ["-fmacho64"],
+        "//conditions:default": [],
+    }),
+    nasm = "@nasm",
+    visibility = ["//visibility:public"],
+)
+
+toolchain(
+    name = "toolchain",
+    toolchain = ":nasm_toolchain",
+    toolchain_type = "@rules_nasm//nasm:toolchain_type",
+    visibility = ["//visibility:public"],
+)
+</code></pre>
+<p>Once the toolchain is defined, it will need to be registered in the <code>MODULE.bazel</code> file.</p>
+<pre><code class="language-python">register_toolchains("//:nasm_toolchain")
+</code></pre>
+<p><strong>ATTRIBUTES</strong></p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Name</th><th style="text-align: left">Description</th><th style="text-align: left">Type</th><th style="text-align: left">Mandatory</th><th style="text-align: left">Default</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a id="nasm_toolchain-name"></a>name</td><td style="text-align: left">A unique name for this target.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels#target-names">Name</a></td><td style="text-align: left">required</td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a id="nasm_toolchain-copts"></a>copts</td><td style="text-align: left">Default arguments to pass to the <code>nasm</code> executable.</td><td style="text-align: left">List of strings</td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
+<tr><td style="text-align: left"><a id="nasm_toolchain-nasm"></a>nasm</td><td style="text-align: left">The <code>nasm</code> executable.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels">Label</a></td><td style="text-align: left">optional</td><td style="text-align: left"><code>None</code></td></tr>
+</tbody></table>
+</div>
+<p><a id="nasm_cc_binary"></a></p>
+<h2 id="nasm_cc_binary"><a class="header" href="#nasm_cc_binary">nasm_cc_binary</a></h2>
+<pre>
+load("@rules_nasm//nasm:defs.bzl", "nasm_cc_binary")
+
+nasm_cc_binary(*, <a href="index.html#nasm_cc_binary-name">name</a>, <a href="index.html#nasm_cc_binary-srcs">srcs</a>, <a href="index.html#nasm_cc_binary-hdrs">hdrs</a>, <a href="index.html#nasm_cc_binary-preincs">preincs</a>, <a href="index.html#nasm_cc_binary-includes">includes</a>, <a href="index.html#nasm_cc_binary-kwargs">**kwargs</a>)
+</pre>
+<p>Assemble a source file as an executable.</p>
+<p>Assembles an <code>nasm</code> source file as an executable binary. The
+assembled object file will be linked against the C standard library,
+meaning that it must define a starting function with the label
+expected by system libraries, can reference C standard library
+functions, and must not export labels which conflict with the C
+standard library.</p>
+<p><em>(Standalone binaries which are not linked to standard libraries are
+planned for a future release.)</em></p>
+<p><strong>NB</strong>: The mangling of function labels is defined by the ABI of the
+target platform. Some degree of portability can be ensured by using
+a macro to define global labels, and deduce the target platform by
+inspecting the target binary format.</p>
+<p><strong>PARAMETERS</strong></p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Name</th><th style="text-align: left">Description</th><th style="text-align: left">Default Value</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a id="nasm_cc_binary-name"></a>name</td><td style="text-align: left">A unique name for this target.</td><td style="text-align: left">none</td></tr>
+<tr><td style="text-align: left"><a id="nasm_cc_binary-srcs"></a>srcs</td><td style="text-align: left">The assembly source files.</td><td style="text-align: left">none</td></tr>
+<tr><td style="text-align: left"><a id="nasm_cc_binary-hdrs"></a>hdrs</td><td style="text-align: left">Other assembly sources which may be included by <code>srcs</code>.</td><td style="text-align: left"><code>None</code></td></tr>
+<tr><td style="text-align: left"><a id="nasm_cc_binary-preincs"></a>preincs</td><td style="text-align: left">Assembly sources which will be included and processed before the source file. Sources will be included in the order listed.</td><td style="text-align: left"><code>None</code></td></tr>
+<tr><td style="text-align: left"><a id="nasm_cc_binary-includes"></a>includes</td><td style="text-align: left">Directories which will be added to the search path for include files.</td><td style="text-align: left"><code>None</code></td></tr>
+<tr><td style="text-align: left"><a id="nasm_cc_binary-kwargs"></a>kwargs</td><td style="text-align: left">Additional keyword arguments passed to the <code>cc_binary</code> rule.</td><td style="text-align: left">none</td></tr>
+</tbody></table>
+</div>
+<p><a id="nasm_cc_library"></a></p>
+<h2 id="nasm_cc_library"><a class="header" href="#nasm_cc_library">nasm_cc_library</a></h2>
+<pre>
+load("@rules_nasm//nasm:defs.bzl", "nasm_cc_library")
+
+nasm_cc_library(*, <a href="index.html#nasm_cc_library-name">name</a>, <a href="index.html#nasm_cc_library-srcs">srcs</a>, <a href="index.html#nasm_cc_library-hdrs">hdrs</a>, <a href="index.html#nasm_cc_library-preincs">preincs</a>, <a href="index.html#nasm_cc_library-includes">includes</a>, <a href="index.html#nasm_cc_library-kwargs">**kwargs</a>)
+</pre>
+<p>Assemble an <code>nasm</code> source for use as a C++ dependency.</p>
+<p>Assembled object files should be usable as C compilation units.
+Rather than create a <code>CcInfo</code> object directly, we pass the assembled
+object file as the src to a <code>cc_library</code> rule, which creates a
+corresponding provider, and captures any additional dependencies.</p>
+<p><strong>PARAMETERS</strong></p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Name</th><th style="text-align: left">Description</th><th style="text-align: left">Default Value</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a id="nasm_cc_library-name"></a>name</td><td style="text-align: left">A unique name for this target.</td><td style="text-align: left">none</td></tr>
+<tr><td style="text-align: left"><a id="nasm_cc_library-srcs"></a>srcs</td><td style="text-align: left">The assembly source files.</td><td style="text-align: left">none</td></tr>
+<tr><td style="text-align: left"><a id="nasm_cc_library-hdrs"></a>hdrs</td><td style="text-align: left">Other assembly sources which may be included by <code>srcs</code>.</td><td style="text-align: left"><code>None</code></td></tr>
+<tr><td style="text-align: left"><a id="nasm_cc_library-preincs"></a>preincs</td><td style="text-align: left">Assembly sources which will be included and processed before the source file. Sources will be included in the order listed.</td><td style="text-align: left"><code>None</code></td></tr>
+<tr><td style="text-align: left"><a id="nasm_cc_library-includes"></a>includes</td><td style="text-align: left">Directories which will be added to the search path for include files.</td><td style="text-align: left"><code>None</code></td></tr>
+<tr><td style="text-align: left"><a id="nasm_cc_library-kwargs"></a>kwargs</td><td style="text-align: left">Additional keyword arguments passed to the <code>cc_library</code> rule.</td><td style="text-align: left">none</td></tr>
+</tbody></table>
+</div>
+<p><a id="nasm_cc_test"></a></p>
+<h2 id="nasm_cc_test"><a class="header" href="#nasm_cc_test">nasm_cc_test</a></h2>
+<pre>
+load("@rules_nasm//nasm:defs.bzl", "nasm_cc_test")
+
+nasm_cc_test(*, <a href="index.html#nasm_cc_test-name">name</a>, <a href="index.html#nasm_cc_test-srcs">srcs</a>, <a href="index.html#nasm_cc_test-size">size</a>, <a href="index.html#nasm_cc_test-hdrs">hdrs</a>, <a href="index.html#nasm_cc_test-preincs">preincs</a>, <a href="index.html#nasm_cc_test-includes">includes</a>, <a href="index.html#nasm_cc_test-kwargs">**kwargs</a>)
+</pre>
+<p>Assemble and execute a test assembly program.</p>
+<p><strong>PARAMETERS</strong></p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Name</th><th style="text-align: left">Description</th><th style="text-align: left">Default Value</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a id="nasm_cc_test-name"></a>name</td><td style="text-align: left">A unique name for this target.</td><td style="text-align: left">none</td></tr>
+<tr><td style="text-align: left"><a id="nasm_cc_test-srcs"></a>srcs</td><td style="text-align: left">The assembly source files.</td><td style="text-align: left">none</td></tr>
+<tr><td style="text-align: left"><a id="nasm_cc_test-size"></a>size</td><td style="text-align: left">The "heaviness" of a test target. See <a href="https://bazel.build/reference/be/common-definitions#test.size">Bazel reference</a> for details.</td><td style="text-align: left"><code>None</code></td></tr>
+<tr><td style="text-align: left"><a id="nasm_cc_test-hdrs"></a>hdrs</td><td style="text-align: left">Other assembly sources which may be included by <code>srcs</code>.</td><td style="text-align: left"><code>None</code></td></tr>
+<tr><td style="text-align: left"><a id="nasm_cc_test-preincs"></a>preincs</td><td style="text-align: left">Assembly sources which will be included and processed before the source file. Sources will be included in the order listed.</td><td style="text-align: left"><code>None</code></td></tr>
+<tr><td style="text-align: left"><a id="nasm_cc_test-includes"></a>includes</td><td style="text-align: left">Directories which will be added to the search path for include files.</td><td style="text-align: left"><code>None</code></td></tr>
+<tr><td style="text-align: left"><a id="nasm_cc_test-kwargs"></a>kwargs</td><td style="text-align: left">Additional keyword arguments passed to the <code>cc_test</code> rule.</td><td style="text-align: left">none</td></tr>
+</tbody></table>
+</div>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>
