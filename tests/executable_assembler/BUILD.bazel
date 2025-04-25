@@ -1,9 +1,10 @@
-load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load("@rules_cc//cc:cc_test.bzl", "cc_test")
 
-sh_test(
+cc_test(
     name = "get_nasm_tool_test",
     size = "small",
-    srcs = ["get_nasm_tool_test.sh"],
+    srcs = ["get_nasm_tool_test.cc"],
     data = ["@rules_nasm//nasm:assembler"],
-    env = {"NASM": "$(rootpath @rules_nasm//nasm:assembler)"},
+    env = {"NASM": "$(rlocationpath @rules_nasm//nasm:assembler)"},
+    deps = ["@rules_cc//cc/runfiles"],
 )

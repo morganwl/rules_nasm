@@ -1,10 +1,41 @@
 load("//nasm:defs.bzl", "nasm_toolchain")
 
+config_setting(
+    # doc = "Target supports ELF64 binaries (linux x86-64)",
+    name = "elf64",
+    constraint_values = [
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+config_setting(
+    # doc = "Target supports Mach-O x86-64 binaries (e.g. MacOS)",
+    name = "macho64",
+    constraint_values = [
+        "@platforms//os:macos",
+        "@platforms//cpu:x86_64",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+config_setting(
+    # doc = "Target supports Windows x86-64 binaries",
+    name = "win64",
+    constraint_values = [
+        "@platforms//os:windows",
+        "@platforms//cpu:x86_64",
+    ],
+    visibility = ["//visibility:public"],
+)
+
 nasm_toolchain(
     name = "nasm_toolchain",
     copts = select({
-        "//nasm:elf64": ["-felf64"],
-        "//nasm:macho64": ["-fmacho64"],
+        ":elf64": ["-felf64"],
+        ":macho64": ["-fmacho64"],
+        ":win64": ["-fwin64"],
         "//conditions:default": [],
     }),
     nasm = "@nasm",
