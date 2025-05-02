@@ -2,7 +2,7 @@
 
 load("@rules_cc//cc:cc_test.bzl", "cc_test")
 load("@rules_nasm//nasm:defs.bzl", "nasm_cc_binary", "nasm_cc_library", "nasm_cc_test")
-load(":native_test.bzl", "native_test")
+load("@bazel_skylib//rules:native_binary.bzl", "native_test")
 
 nasm_cc_test(
     name = "nasm_test_test",
@@ -31,7 +31,7 @@ nasm_cc_library(
 native_test(
     name = "nasm_binary_test",
     size = "small",
-    executable = select({
+    src = select({
         "@platforms//os:macos": ":nasm_executable_mac",
         "//conditions:default": ":nasm_executable",
     }),
