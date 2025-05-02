@@ -8,13 +8,9 @@ on:
     paths:
       # Only trigger for new releases
       - "version.bzl"
-
 defaults:
   run:
     shell: bash
-
-env:
-  BAZEL_STARTUP_FLAGS: --bazelrc=${{ github.workspace }}/.github/github.bazelrc
 
 jobs:
   release:
