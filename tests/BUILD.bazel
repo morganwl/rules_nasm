@@ -1,15 +1,15 @@
 # Copyright (c) 2024 Morgan Wajda-Levie.
 
+load("@bazel_skylib//rules:native_binary.bzl", "native_test")
 load("@rules_cc//cc:cc_test.bzl", "cc_test")
 load("@rules_nasm//nasm:defs.bzl", "nasm_cc_binary", "nasm_cc_library", "nasm_cc_test")
-load("@rules_shell//shell:sh_test.bzl", "sh_test")
 
 nasm_cc_test(
     name = "nasm_test_test",
     size = "small",
     srcs = select({
-        "@platforms//os:linux": ["always_succeed_main.asm"],
         "@platforms//os:macos": ["always_succeed_main_mac.asm"],
+        "//conditions:default": ["always_succeed_main.asm"],
     }),
 )
 
@@ -23,26 +23,27 @@ cc_test(
 nasm_cc_library(
     name = "nasm_component",
     srcs = select({
-        "@platforms//os:linux": ["nasm_component_test.asm"],
         "@platforms//os:macos": ["nasm_component_test_mac.asm"],
+        "//conditions:default": ["nasm_component_test.asm"],
     }),
 )
 
-sh_test(
+native_test(
     name = "nasm_binary_test",
     size = "small",
-    srcs = select({
-        "@platforms//os:linux": [":nasm_executable"],
-        "@platforms//os:macos": [":nasm_executable_mac"],
+    src = select({
+        "@platforms//os:macos": ":nasm_executable_mac",
+        "//conditions:default": ":nasm_executable",
     }),
 )
 
 nasm_cc_binary(
     name = "nasm_executable",
     srcs = ["always_succeed_main.asm"],
-    target_compatible_with = [
-        "@platforms//os:linux",
-    ],
+    target_compatible_with = select({
+        "@platforms//os:macos": ["@platforms//:incompatible"],
+        "//conditions:default": [],
+    }),
 )
 
 nasm_cc_binary(
