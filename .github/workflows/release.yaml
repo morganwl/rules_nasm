@@ -1,23 +1,60 @@
-# Cut a release whenever a new tag is pushed to the repo.
-# You should use an annotated tag, like `git tag -a v1.2.3`
-# and put the release notes into the commit message for the tag.#
-#
-# Per template:
-# https://github.com/bazel-contrib/rules-template/blob/main/.github/workflows/release.yml
-
+---
 name: Release
-
 on:
+  workflow_dispatch:
   push:
-    tags:
-      - "*.*.*"
+    branches:
+      - main
+    paths:
+      # Only trigger for new releases
+      - "version.bzl"
 
-permissions:
-  contents: write
+defaults:
+  run:
+    shell: bash
 
 jobs:
   release:
-    uses: bazel-contrib/.github/.github/workflows/release_ruleset.yaml@v6
-    with:
-      release_files: rules_nasm-*.tar.gz
-      prerelease: false
+    if: ${{ github.repository_owner == 'morganwl' }}
+    permissions:
+      contents: write
+      actions: write
+      attestations: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Detect the current version
+        run: |
+          version="$(grep 'VERSION =' ./version.bzl | sed 's/VERSION = "//' | sed 's/"//')"
+          echo "RELEASE_VERSION=${version}" >> $GITHUB_ENV
+      # Ensure this does not exclude the module used for the .bcr presubmit job.
+      - name: Create release artifact
+        run: |
+          tar -czf ${{ github.workspace }}/.github/rules_nasm.tar.gz --exclude=".git" --exclude=".github" -C ${{ github.workspace }} .
+          sha256_base64="$(shasum --algorithm 256 ${{ github.workspace }}/.github/rules_nasm.tar.gz | awk '{ print $1 }' | xxd -r -p | base64)"
+          echo "ARCHIVE_SHA256_BASE64=${sha256_base64}" >> "${GITHUB_ENV}"
+      - name: Generate release notes
+        run: |
+          # Generate the release notes
+          sed 's/{version}/${{env.RELEASE_VERSION}}/g' ${{ github.workspace }}/.github/release_notes.template \
+          | sed 's#{sha256_base64}#${{ env.ARCHIVE_SHA256_BASE64 }}#g' \
+          > ${{ github.workspace }}/.github/release_notes.txt
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        id: rules_release
+        with:
+          generate_release_notes: true
+          tag_name: ${{ env.RELEASE_VERSION }}
+          body_path: ${{ github.workspace }}/.github/release_notes.txt
+          target_commitish: ${{ github.base_ref }}
+      - name: "Upload the rules archive"
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.rules_release.outputs.upload_url }}
+          asset_name: rules_nasm-${{ env.RELEASE_VERSION }}.tar.gz
+          asset_path: ${{ github.workspace }}/.github/rules_nasm.tar.gz
+          asset_content_type: application/gzip
