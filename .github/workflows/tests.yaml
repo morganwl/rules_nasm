@@ -26,7 +26,6 @@ jobs:
       - name: Unit tests
         env:
           USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
-          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
         run:
           bazel
           --bazelrc=${{ github.workspace }}/ci.bazelrc
@@ -35,7 +34,6 @@ jobs:
       - name: e2e tests
         env:
           USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
-          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
         run:
           e2e/test.sh
           --bazelrc=${{ github.workspace }}/ci.bazelrc
