@@ -22,19 +22,22 @@ jobs:
       - uses: bazel-contrib/setup-bazel@0.14.0
         with:
           bazelisk-cache: true
-          disk-cache: ${{ github.workflow }}
-          repository-cache: true
       - uses: actions/checkout@v4
-      - name: Unit
+      - name: Unit tests
         env:
           USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
+          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
         run:
-          bazel test //...
-      - name: e2e
+          bazel
+          --bazelrc="${GITHUB_WORKSPACE}/.github/workflows/ci.bazelrc"
+          test //...
+      - name: e2e tests
         env:
           USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
+          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
         run:
           e2e/test.sh
+          --bazelrc=${GITHUB_WORKSPACE}/.github/workflows/ci.bazelrc
 
   formatting:
     runs-on: ubuntu-latest
