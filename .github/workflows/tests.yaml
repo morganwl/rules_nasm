@@ -29,17 +29,17 @@ jobs:
           BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
         run:
           bazel
-          --bazelrc=${GITHUB_WORKSPACE}/.github/workflows/ci.bazelrc
+          --bazelrc=${{ github.workspace }}/ci.bazelrc
           test //...
-          --remote_header=x-buildbuddy-api-key="$BUILDBUDDY_API_KEY"
+          --remote_header=x-buildbuddy-api-key=${{ secrets.BUILDBUDDY_API_KEY }}
       - name: e2e tests
         env:
           USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
           BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
         run:
           e2e/test.sh
-          --bazelrc=${GITHUB_WORKSPACE}/.github/workflows/ci.bazelrc
-          --remote_header=x-buildbuddy-api-key="$BUILDBUDDY_API_KEY"
+          --bazelrc=${{ github.workspace }}/ci.bazelrc
+          --remote_header=x-buildbuddy-api-key=${{ secrets.BUILDBUDDY_API_KEY }}
 
   formatting:
     runs-on: ubuntu-latest
