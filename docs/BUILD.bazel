@@ -4,7 +4,7 @@ load("@stardoc//stardoc:stardoc.bzl", "stardoc")
 
 stardoc(
     name = "index",
-    out = "src/index.md",
+    out = "src/rules.md",
     input = "//nasm:defs.bzl",
     table_of_contents_template = "@stardoc//stardoc:templates/markdown_tables/table_of_contents.vm",
     deps = ["//nasm:defs"],

@@ -29,7 +29,7 @@ jobs:
           BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
         run:
           bazel
-          --bazelrc=${{ github.workspace }}/ci.bazelrc
+          --bazelrc=${{ github.workspace }/.github/ci.bazelrc
           test //...
           --remote_header=x-buildbuddy-api-key=${{ secrets.BUILDBUDDY_API_KEY }}
       - name: e2e tests
@@ -38,7 +38,7 @@ jobs:
           BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
         run:
           e2e/test.sh
-          --bazelrc=${{ github.workspace }}/ci.bazelrc
+          --bazelrc=${{ github.workspace }}/.github/ci.bazelrc
           --remote_header=x-buildbuddy-api-key=${{ secrets.BUILDBUDDY_API_KEY }}
 
   formatting:
