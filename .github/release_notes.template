@@ -11,14 +11,4 @@ register_toolchains(
 )
 ```
 
-## WORKSPACE
-```python
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-http_archive(
-    name = "rules_nasm",
-    integrity = "sha256-{sha256_base64}",
-    urls = ["https://github.com/morganwl/rules_nasm/releases/download/{version}/rules_nasm-{version}.tar.gz"],
-)
-```
-
-Additional documentation can be found at: https://github.com/morganwl/rules_nasm
+Additional documentation can be found at: https://morganwl.github.io/rules_nasm/
