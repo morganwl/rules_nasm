@@ -155,17 +155,13 @@
 
                 <div id="content" class="content">
                     <main>
-                        <!-- Generated with Stardoc: http://skydoc.bazel.build -->
-<h1 id="rules_nasm"><a class="header" href="#rules_nasm">rules_nasm</a></h1>
-<p><code>nasm</code> is an assembler for the x86 architecture that recognizes a
-variant of Intel assembly syntax, as opposed to the AT&amp;T syntax
-recognized by <code>gcc</code> and most other C compilers. <code>nasm</code> sources are
-sometimes included in open-source software, such as
-<a href="https://ffmpeg.org/">ffmpeg</a>.</p>
-<p><code>rules_nasm</code> provides an idiomatically consistent interface for
-incorporating <code>nasm</code> sources into Bazel projects, although the current
-implementation is incomplete.</p>
-<h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
+                        <h1 id="netwide-assembly-rules-for-bazel"><a class="header" href="#netwide-assembly-rules-for-bazel">Netwide Assembly rules for Bazel</a></h1>
+<p><img src="https://github.com/morganwl/rules_nasm/actions/workflows/tests.yaml/badge.svg" alt="Testing status" /></p>
+<p>Ruleset and toolchain for assembling Netwide Assembly (nasm) sources in
+Bazel.</p>
+<p>This is an early release, and is provided without assurances.
+Contributions, feedback, and bug reports are welcome.</p>
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
 <p>Add the following snippet to your <code>MODULE.bazel</code> file:</p>
 <pre><code class="language-python">bazel_dep(name = "rules_nasm", version = "{SEE_RELEASES}")
 
@@ -173,155 +169,32 @@ register_toolchains(
     "@rules_nasm//nasm/toolchain",
 )
 </code></pre>
+<p>See the <a href="https://github.com/morganwl/rules_nasm/releases">release notes</a>
+for getting started with the latest version.</p>
 <p>Note that toolchain registration can be updated to point to a custom toolchain
 if users wish to have full control over the version of nasm used in different
-configurations. See <a href="#nasm_toolchain">nasm_toolchain</a> for more details on defining
+configurations. See <a href="./rules.html#nasm_toolchain">nasm_toolchain</a> for more details on defining
 toolchains.</p>
-<h2 id="rules"><a class="header" href="#rules">Rules</a></h2>
+<h2 id="supported-platforms"><a class="header" href="#supported-platforms">Supported platforms</a></h2>
+<p>The following platforms are currently supported:</p>
 <ul>
-<li><a href="#nasm_library">nasm_library</a></li>
-<li><a href="#nasm_toolchain">nasm_toolchain</a></li>
+<li>Linux x86_64</li>
+<li>MacOS x86_64</li>
+<li>Windows x86_64</li>
 </ul>
-<h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
-<ul>
-<li><a href="#nasm_cc_binary">nasm_cc_binary</a></li>
-<li><a href="#nasm_cc_library">nasm_cc_library</a></li>
-<li><a href="#nasm_cc_test">nasm_cc_test</a></li>
-</ul>
-<p><a id="nasm_library"></a></p>
-<h2 id="nasm_library"><a class="header" href="#nasm_library">nasm_library</a></h2>
-<pre>
-load("@rules_nasm//nasm:defs.bzl", "nasm_library")
+<h2 id="known-issues"><a class="header" href="#known-issues">Known Issues</a></h2>
+<p>Bugs, known issues, and planned features are documented in
+<a href="https://github.com/morganwl/rules_nasm/issues">Issues</a>. Additional
+issue reports are welcome.</p>
 
-nasm_library(<a href="#nasm_library-name">name</a>, <a href="#nasm_library-srcs">srcs</a>, <a href="#nasm_library-hdrs">hdrs</a>, <a href="#nasm_library-copts">copts</a>, <a href="#nasm_library-includes">includes</a>, <a href="#nasm_library-preincs">preincs</a>)
-</pre>
-<p>Assemble an <code>nasm</code> source for use as a C++ dependency.</p>
-<p><strong>ATTRIBUTES</strong></p>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Name</th><th style="text-align: left">Description</th><th style="text-align: left">Type</th><th style="text-align: left">Mandatory</th><th style="text-align: left">Default</th></tr></thead><tbody>
-<tr><td style="text-align: left"><a id="nasm_library-name"></a>name</td><td style="text-align: left">A unique name for this target.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels#target-names">Name</a></td><td style="text-align: left">required</td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left"><a id="nasm_library-srcs"></a>srcs</td><td style="text-align: left">The assembly source file. Must have an extension of .asm, .nasm, .s, .i.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels">List of labels</a></td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
-<tr><td style="text-align: left"><a id="nasm_library-hdrs"></a>hdrs</td><td style="text-align: left">Other assembly sources which may be included by <code>src</code>. Must have an extension of .asm, .nasm, .s, .i.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels">List of labels</a></td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
-<tr><td style="text-align: left"><a id="nasm_library-copts"></a>copts</td><td style="text-align: left">Additional compilation flags to <code>nasm</code>.</td><td style="text-align: left">List of strings</td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
-<tr><td style="text-align: left"><a id="nasm_library-includes"></a>includes</td><td style="text-align: left">Directories which will be added to the search path for include files.</td><td style="text-align: left">List of strings</td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
-<tr><td style="text-align: left"><a id="nasm_library-preincs"></a>preincs</td><td style="text-align: left">Assembly sources which will be included and processed before the source file. Sources will be included in the order listed. Must have an extension of .asm, .nasm, .s, .i.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels">List of labels</a></td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
-</tbody></table>
-</div>
-<p><a id="nasm_toolchain"></a></p>
-<h2 id="nasm_toolchain"><a class="header" href="#nasm_toolchain">nasm_toolchain</a></h2>
-<pre>
-load("@rules_nasm//nasm:defs.bzl", "nasm_toolchain")
-
-nasm_toolchain(<a href="#nasm_toolchain-name">name</a>, <a href="#nasm_toolchain-copts">copts</a>, <a href="#nasm_toolchain-nasm">nasm</a>)
-</pre>
-<p>A toolchain for configuring <code>nasm</code> rules.</p>
-<p>A toolchain can be defined by adding a snippet like the following
-somewhere in a <code>BUILD.bazel</code> file within your workspace.</p>
-<pre><code class="language-python">load("@rules_nasm//nasm:defs.bzl", "nasm_toolchain")
-
-nasm_toolchain(
-    name = "nasm_toolchain",
-    copts = select({
-        "//nasm:elf64": ["-felf64"],
-        "//nasm:macho64": ["-fmacho64"],
-        "//conditions:default": [],
-    }),
-    nasm = "@nasm",
-    visibility = ["//visibility:public"],
-)
-
-toolchain(
-    name = "toolchain",
-    toolchain = ":nasm_toolchain",
-    toolchain_type = "@rules_nasm//nasm:toolchain_type",
-    visibility = ["//visibility:public"],
-)
-</code></pre>
-<p>Once the toolchain is defined, it will need to be registered in the <code>MODULE.bazel</code> file.</p>
-<pre><code class="language-python">register_toolchains("//:nasm_toolchain")
-</code></pre>
-<p><strong>ATTRIBUTES</strong></p>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Name</th><th style="text-align: left">Description</th><th style="text-align: left">Type</th><th style="text-align: left">Mandatory</th><th style="text-align: left">Default</th></tr></thead><tbody>
-<tr><td style="text-align: left"><a id="nasm_toolchain-name"></a>name</td><td style="text-align: left">A unique name for this target.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels#target-names">Name</a></td><td style="text-align: left">required</td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left"><a id="nasm_toolchain-copts"></a>copts</td><td style="text-align: left">Default arguments to pass to the <code>nasm</code> executable.</td><td style="text-align: left">List of strings</td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
-<tr><td style="text-align: left"><a id="nasm_toolchain-nasm"></a>nasm</td><td style="text-align: left">The <code>nasm</code> executable.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels">Label</a></td><td style="text-align: left">optional</td><td style="text-align: left"><code>None</code></td></tr>
-</tbody></table>
-</div>
-<p><a id="nasm_cc_binary"></a></p>
-<h2 id="nasm_cc_binary"><a class="header" href="#nasm_cc_binary">nasm_cc_binary</a></h2>
-<pre>
-load("@rules_nasm//nasm:defs.bzl", "nasm_cc_binary")
-
-nasm_cc_binary(*, <a href="#nasm_cc_binary-name">name</a>, <a href="#nasm_cc_binary-srcs">srcs</a>, <a href="#nasm_cc_binary-hdrs">hdrs</a>, <a href="#nasm_cc_binary-preincs">preincs</a>, <a href="#nasm_cc_binary-includes">includes</a>, <a href="#nasm_cc_binary-kwargs">**kwargs</a>)
-</pre>
-<p>Assemble a source file as an executable.</p>
-<p>Assembles an <code>nasm</code> source file as an executable binary. The
-assembled object file will be linked against the C standard library,
-meaning that it must define a starting function with the label
-expected by system libraries, can reference C standard library
-functions, and must not export labels which conflict with the C
-standard library.</p>
-<p><em>(Standalone binaries which are not linked to standard libraries are
-planned for a future release.)</em></p>
-<p><strong>NB</strong>: The mangling of function labels is defined by the ABI of the
-target platform. Some degree of portability can be ensured by using
-a macro to define global labels, and deduce the target platform by
-inspecting the target binary format.</p>
-<p><strong>PARAMETERS</strong></p>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Name</th><th style="text-align: left">Description</th><th style="text-align: left">Default Value</th></tr></thead><tbody>
-<tr><td style="text-align: left"><a id="nasm_cc_binary-name"></a>name</td><td style="text-align: left">A unique name for this target.</td><td style="text-align: left">none</td></tr>
-<tr><td style="text-align: left"><a id="nasm_cc_binary-srcs"></a>srcs</td><td style="text-align: left">The assembly source files.</td><td style="text-align: left">none</td></tr>
-<tr><td style="text-align: left"><a id="nasm_cc_binary-hdrs"></a>hdrs</td><td style="text-align: left">Other assembly sources which may be included by <code>srcs</code>.</td><td style="text-align: left"><code>None</code></td></tr>
-<tr><td style="text-align: left"><a id="nasm_cc_binary-preincs"></a>preincs</td><td style="text-align: left">Assembly sources which will be included and processed before the source file. Sources will be included in the order listed.</td><td style="text-align: left"><code>None</code></td></tr>
-<tr><td style="text-align: left"><a id="nasm_cc_binary-includes"></a>includes</td><td style="text-align: left">Directories which will be added to the search path for include files.</td><td style="text-align: left"><code>None</code></td></tr>
-<tr><td style="text-align: left"><a id="nasm_cc_binary-kwargs"></a>kwargs</td><td style="text-align: left">Additional keyword arguments passed to the <code>cc_binary</code> rule.</td><td style="text-align: left">none</td></tr>
-</tbody></table>
-</div>
-<p><a id="nasm_cc_library"></a></p>
-<h2 id="nasm_cc_library"><a class="header" href="#nasm_cc_library">nasm_cc_library</a></h2>
-<pre>
-load("@rules_nasm//nasm:defs.bzl", "nasm_cc_library")
-
-nasm_cc_library(*, <a href="#nasm_cc_library-name">name</a>, <a href="#nasm_cc_library-srcs">srcs</a>, <a href="#nasm_cc_library-hdrs">hdrs</a>, <a href="#nasm_cc_library-preincs">preincs</a>, <a href="#nasm_cc_library-includes">includes</a>, <a href="#nasm_cc_library-kwargs">**kwargs</a>)
-</pre>
-<p>Assemble an <code>nasm</code> source for use as a C++ dependency.</p>
-<p>Assembled object files should be usable as C compilation units.
-Rather than create a <code>CcInfo</code> object directly, we pass the assembled
-object file as the src to a <code>cc_library</code> rule, which creates a
-corresponding provider, and captures any additional dependencies.</p>
-<p><strong>PARAMETERS</strong></p>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Name</th><th style="text-align: left">Description</th><th style="text-align: left">Default Value</th></tr></thead><tbody>
-<tr><td style="text-align: left"><a id="nasm_cc_library-name"></a>name</td><td style="text-align: left">A unique name for this target.</td><td style="text-align: left">none</td></tr>
-<tr><td style="text-align: left"><a id="nasm_cc_library-srcs"></a>srcs</td><td style="text-align: left">The assembly source files.</td><td style="text-align: left">none</td></tr>
-<tr><td style="text-align: left"><a id="nasm_cc_library-hdrs"></a>hdrs</td><td style="text-align: left">Other assembly sources which may be included by <code>srcs</code>.</td><td style="text-align: left"><code>None</code></td></tr>
-<tr><td style="text-align: left"><a id="nasm_cc_library-preincs"></a>preincs</td><td style="text-align: left">Assembly sources which will be included and processed before the source file. Sources will be included in the order listed.</td><td style="text-align: left"><code>None</code></td></tr>
-<tr><td style="text-align: left"><a id="nasm_cc_library-includes"></a>includes</td><td style="text-align: left">Directories which will be added to the search path for include files.</td><td style="text-align: left"><code>None</code></td></tr>
-<tr><td style="text-align: left"><a id="nasm_cc_library-kwargs"></a>kwargs</td><td style="text-align: left">Additional keyword arguments passed to the <code>cc_library</code> rule.</td><td style="text-align: left">none</td></tr>
-</tbody></table>
-</div>
-<p><a id="nasm_cc_test"></a></p>
-<h2 id="nasm_cc_test"><a class="header" href="#nasm_cc_test">nasm_cc_test</a></h2>
-<pre>
-load("@rules_nasm//nasm:defs.bzl", "nasm_cc_test")
-
-nasm_cc_test(*, <a href="#nasm_cc_test-name">name</a>, <a href="#nasm_cc_test-srcs">srcs</a>, <a href="#nasm_cc_test-size">size</a>, <a href="#nasm_cc_test-hdrs">hdrs</a>, <a href="#nasm_cc_test-preincs">preincs</a>, <a href="#nasm_cc_test-includes">includes</a>, <a href="#nasm_cc_test-kwargs">**kwargs</a>)
-</pre>
-<p>Assemble and execute a test assembly program.</p>
-<p><strong>PARAMETERS</strong></p>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Name</th><th style="text-align: left">Description</th><th style="text-align: left">Default Value</th></tr></thead><tbody>
-<tr><td style="text-align: left"><a id="nasm_cc_test-name"></a>name</td><td style="text-align: left">A unique name for this target.</td><td style="text-align: left">none</td></tr>
-<tr><td style="text-align: left"><a id="nasm_cc_test-srcs"></a>srcs</td><td style="text-align: left">The assembly source files.</td><td style="text-align: left">none</td></tr>
-<tr><td style="text-align: left"><a id="nasm_cc_test-size"></a>size</td><td style="text-align: left">The "heaviness" of a test target. See <a href="https://bazel.build/reference/be/common-definitions#test.size">Bazel reference</a> for details.</td><td style="text-align: left"><code>None</code></td></tr>
-<tr><td style="text-align: left"><a id="nasm_cc_test-hdrs"></a>hdrs</td><td style="text-align: left">Other assembly sources which may be included by <code>srcs</code>.</td><td style="text-align: left"><code>None</code></td></tr>
-<tr><td style="text-align: left"><a id="nasm_cc_test-preincs"></a>preincs</td><td style="text-align: left">Assembly sources which will be included and processed before the source file. Sources will be included in the order listed.</td><td style="text-align: left"><code>None</code></td></tr>
-<tr><td style="text-align: left"><a id="nasm_cc_test-includes"></a>includes</td><td style="text-align: left">Directories which will be added to the search path for include files.</td><td style="text-align: left"><code>None</code></td></tr>
-<tr><td style="text-align: left"><a id="nasm_cc_test-kwargs"></a>kwargs</td><td style="text-align: left">Additional keyword arguments passed to the <code>cc_test</code> rule.</td><td style="text-align: left">none</td></tr>
-</tbody></table>
-</div>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
 
+                            <a rel="next prefetch" href="rules.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -330,6 +203,9 @@ nasm_cc_test(*, <a href="#nasm_cc_test-name">name</a>, <a href="#nasm_cc_test-sr
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
 
+                    <a rel="next prefetch" href="rules.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>

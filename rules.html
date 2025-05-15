@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>rules_nasm</title>
-        <meta name="robots" content="noindex">
+        <title>Rules - rules_nasm</title>
 
 
         <!-- Custom HTML head -->
@@ -156,57 +155,26 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="netwide-assembly-rules-for-bazel"><a class="header" href="#netwide-assembly-rules-for-bazel">Netwide Assembly rules for Bazel</a></h1>
-<p><img src="https://github.com/morganwl/rules_nasm/actions/workflows/tests.yaml/badge.svg" alt="Testing status" /></p>
-<p>Ruleset and toolchain for assembling Netwide Assembly (nasm) sources in
-Bazel.</p>
-<p>This is an early release, and is provided without assurances.
-Contributions, feedback, and bug reports are welcome.</p>
-<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
-<p>Add the following snippet to your <code>MODULE.bazel</code> file:</p>
-<pre><code class="language-python">bazel_dep(name = "rules_nasm", version = "{SEE_RELEASES}")
-
-register_toolchains(
-    "@rules_nasm//nasm/toolchain",
-)
-</code></pre>
-<p>See the <a href="https://github.com/morganwl/rules_nasm/releases">release notes</a>
-for getting started with the latest version.</p>
-<p>Note that toolchain registration can be updated to point to a custom toolchain
-if users wish to have full control over the version of nasm used in different
-configurations. See <a href="./rules.html#nasm_toolchain">nasm_toolchain</a> for more details on defining
-toolchains.</p>
-<h2 id="supported-platforms"><a class="header" href="#supported-platforms">Supported platforms</a></h2>
-<p>The following platforms are currently supported:</p>
-<ul>
-<li>Linux x86_64</li>
-<li>MacOS x86_64</li>
-<li>Windows x86_64</li>
-</ul>
-<h2 id="known-issues"><a class="header" href="#known-issues">Known Issues</a></h2>
-<p>Bugs, known issues, and planned features are documented in
-<a href="https://github.com/morganwl/rules_nasm/issues">Issues</a>. Additional
-issue reports are welcome.</p>
-<div style="break-before: page; page-break-before: always;"></div><!-- Generated with Stardoc: http://skydoc.bazel.build -->
+                        <!-- Generated with Stardoc: http://skydoc.bazel.build -->
 <h1 id="rules_nasm"><a class="header" href="#rules_nasm">rules_nasm</a></h1>
 <p>Bazel rules for Netwide Assembly (nasm).</p>
 <h2 id="rules"><a class="header" href="#rules">Rules</a></h2>
 <ul>
-<li><a href="rules.html#nasm_library">nasm_library</a></li>
-<li><a href="rules.html#nasm_toolchain">nasm_toolchain</a></li>
+<li><a href="#nasm_library">nasm_library</a></li>
+<li><a href="#nasm_toolchain">nasm_toolchain</a></li>
 </ul>
 <h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
 <ul>
-<li><a href="rules.html#nasm_cc_binary">nasm_cc_binary</a></li>
-<li><a href="rules.html#nasm_cc_library">nasm_cc_library</a></li>
-<li><a href="rules.html#nasm_cc_test">nasm_cc_test</a></li>
+<li><a href="#nasm_cc_binary">nasm_cc_binary</a></li>
+<li><a href="#nasm_cc_library">nasm_cc_library</a></li>
+<li><a href="#nasm_cc_test">nasm_cc_test</a></li>
 </ul>
 <p><a id="nasm_library"></a></p>
 <h2 id="nasm_library"><a class="header" href="#nasm_library">nasm_library</a></h2>
 <pre>
 load("@rules_nasm//nasm:defs.bzl", "nasm_library")
 
-nasm_library(<a href="rules.html#nasm_library-name">name</a>, <a href="rules.html#nasm_library-srcs">srcs</a>, <a href="rules.html#nasm_library-hdrs">hdrs</a>, <a href="rules.html#nasm_library-copts">copts</a>, <a href="rules.html#nasm_library-includes">includes</a>, <a href="rules.html#nasm_library-preincs">preincs</a>)
+nasm_library(<a href="#nasm_library-name">name</a>, <a href="#nasm_library-srcs">srcs</a>, <a href="#nasm_library-hdrs">hdrs</a>, <a href="#nasm_library-copts">copts</a>, <a href="#nasm_library-includes">includes</a>, <a href="#nasm_library-preincs">preincs</a>)
 </pre>
 <p>Assemble an <code>nasm</code> source for use as a C++ dependency.</p>
 <p><strong>ATTRIBUTES</strong></p>
@@ -224,7 +192,7 @@ nasm_library(<a href="rules.html#nasm_library-name">name</a>, <a href="rules.htm
 <pre>
 load("@rules_nasm//nasm:defs.bzl", "nasm_toolchain")
 
-nasm_toolchain(<a href="rules.html#nasm_toolchain-name">name</a>, <a href="rules.html#nasm_toolchain-copts">copts</a>, <a href="rules.html#nasm_toolchain-nasm">nasm</a>)
+nasm_toolchain(<a href="#nasm_toolchain-name">name</a>, <a href="#nasm_toolchain-copts">copts</a>, <a href="#nasm_toolchain-nasm">nasm</a>)
 </pre>
 <p>A toolchain for configuring <code>nasm</code> rules.</p>
 <p>A toolchain can be defined by adding a snippet like the following
@@ -264,7 +232,7 @@ toolchain(
 <pre>
 load("@rules_nasm//nasm:defs.bzl", "nasm_cc_binary")
 
-nasm_cc_binary(*, <a href="rules.html#nasm_cc_binary-name">name</a>, <a href="rules.html#nasm_cc_binary-srcs">srcs</a>, <a href="rules.html#nasm_cc_binary-hdrs">hdrs</a>, <a href="rules.html#nasm_cc_binary-preincs">preincs</a>, <a href="rules.html#nasm_cc_binary-includes">includes</a>, <a href="rules.html#nasm_cc_binary-kwargs">**kwargs</a>)
+nasm_cc_binary(*, <a href="#nasm_cc_binary-name">name</a>, <a href="#nasm_cc_binary-srcs">srcs</a>, <a href="#nasm_cc_binary-hdrs">hdrs</a>, <a href="#nasm_cc_binary-preincs">preincs</a>, <a href="#nasm_cc_binary-includes">includes</a>, <a href="#nasm_cc_binary-kwargs">**kwargs</a>)
 </pre>
 <p>Assemble a source file as an executable.</p>
 <p>Assembles an <code>nasm</code> source file as an executable binary. The
@@ -294,7 +262,7 @@ inspecting the target binary format.</p>
 <pre>
 load("@rules_nasm//nasm:defs.bzl", "nasm_cc_library")
 
-nasm_cc_library(*, <a href="rules.html#nasm_cc_library-name">name</a>, <a href="rules.html#nasm_cc_library-srcs">srcs</a>, <a href="rules.html#nasm_cc_library-hdrs">hdrs</a>, <a href="rules.html#nasm_cc_library-preincs">preincs</a>, <a href="rules.html#nasm_cc_library-includes">includes</a>, <a href="rules.html#nasm_cc_library-kwargs">**kwargs</a>)
+nasm_cc_library(*, <a href="#nasm_cc_library-name">name</a>, <a href="#nasm_cc_library-srcs">srcs</a>, <a href="#nasm_cc_library-hdrs">hdrs</a>, <a href="#nasm_cc_library-preincs">preincs</a>, <a href="#nasm_cc_library-includes">includes</a>, <a href="#nasm_cc_library-kwargs">**kwargs</a>)
 </pre>
 <p>Assemble an <code>nasm</code> source for use as a C++ dependency.</p>
 <p>Assembled object files should be usable as C compilation units.
@@ -316,7 +284,7 @@ corresponding provider, and captures any additional dependencies.</p>
 <pre>
 load("@rules_nasm//nasm:defs.bzl", "nasm_cc_test")
 
-nasm_cc_test(*, <a href="rules.html#nasm_cc_test-name">name</a>, <a href="rules.html#nasm_cc_test-srcs">srcs</a>, <a href="rules.html#nasm_cc_test-size">size</a>, <a href="rules.html#nasm_cc_test-hdrs">hdrs</a>, <a href="rules.html#nasm_cc_test-preincs">preincs</a>, <a href="rules.html#nasm_cc_test-includes">includes</a>, <a href="rules.html#nasm_cc_test-kwargs">**kwargs</a>)
+nasm_cc_test(*, <a href="#nasm_cc_test-name">name</a>, <a href="#nasm_cc_test-srcs">srcs</a>, <a href="#nasm_cc_test-size">size</a>, <a href="#nasm_cc_test-hdrs">hdrs</a>, <a href="#nasm_cc_test-preincs">preincs</a>, <a href="#nasm_cc_test-includes">includes</a>, <a href="#nasm_cc_test-kwargs">**kwargs</a>)
 </pre>
 <p>Assemble and execute a test assembly program.</p>
 <p><strong>PARAMETERS</strong></p>
@@ -334,6 +302,9 @@ nasm_cc_test(*, <a href="rules.html#nasm_cc_test-name">name</a>, <a href="rules.
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
 
                         <div style="clear: both"></div>
@@ -342,6 +313,9 @@ nasm_cc_test(*, <a href="rules.html#nasm_cc_test-name">name</a>, <a href="rules.
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
             </nav>
 
@@ -365,11 +339,6 @@ nasm_cc_test(*, <a href="rules.html#nasm_cc_test-name">name</a>, <a href="rules.
 
         <!-- Custom JS scripts -->
 
-        <script>
-        window.addEventListener('load', function() {
-            window.setTimeout(window.print, 100);
-        });
-        </script>
 
     </div>
     </body>
