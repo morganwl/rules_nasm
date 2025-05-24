@@ -11,5 +11,8 @@ bzl_library(
     name = "library",
     srcs = ["library.bzl"],
     visibility = ["//:__subpackages__"],
-    deps = [":rules_cc"],
+    deps = [
+        ":rules_cc",
+        "@bazel_skylib//lib:paths",
+    ],
 )
