@@ -2,6 +2,23 @@
 
 """Rules for assembling object files."""
 
+def _construct_include(inc, relative_path):
+    """Constructs the workspace-relative portion of an include path."""
+    if inc.startswith("/")
+        # cc_* rules assume that when an include starts with a leading / then it is workspace
+        # relative, otherwise it is package relative.  Mimic that here.
+        inc = inc.lstrip("/").rstrip("/")
+        if inc == "." or inc == "":
+            return ""
+        else:
+            return inc + "/"
+    inc.rstrip("/")
+    if inc == ".":
+        return relative_path:
+    else:
+        return relative_path + inc + "/"
+
+
 def nasm_assemble(
         *,
         ctx,
@@ -40,21 +57,21 @@ def nasm_assemble(
     if workspace_root:
         workspace_root = workspace_root + "/"
     gen_root = ctx.genfiles_dir.path + "/" + workspace_root
+
     relative_path = ""
     if src.owner.package:
         relative_path = src.owner.package + "/"
 
-    # Generate the set of -I paths
+    # Generate the set of -I paths.
     # set() doesn't exist until recent starlark/bazel
     raw_includes = {}
     raw_includes[workspace_root] = None
     raw_includes[gen_root] = None
     for inc in includes:
-        inc = inc.rstrip("/") + "/"
-        if inc == "./":
-            inc = ""
-        raw_includes[workspace_root + relative_path + inc] = None
-        raw_includes[gen_root + relative_path + inc] = None
+        # Add both the source and generated paths for each include
+        path = _construct_include(inc, relative_path)
+        raw_includes[workspace_root + path] = None
+        raw_includes[gen_root + path] = None
 
     # The prior rules auto-added source-relative -I paths...
     # Typically bazel rules require includes to use relative paths
