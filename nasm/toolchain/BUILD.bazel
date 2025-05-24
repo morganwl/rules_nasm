@@ -1,4 +1,4 @@
-load("//nasm:defs.bzl", "nasm_toolchain")
+load("//nasm:nasm_toolchain.bzl", "nasm_toolchain")
 
 config_setting(
     # doc = "Target supports ELF64 binaries (linux x86-64)",

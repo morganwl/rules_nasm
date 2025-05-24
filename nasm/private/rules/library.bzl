@@ -2,22 +2,7 @@
 
 """Rules for assembling object files."""
 
-def _construct_include(inc, relative_path):
-    """Constructs the workspace-relative portion of an include path."""
-    if inc.startswith("/")
-        # cc_* rules assume that when an include starts with a leading / then it is workspace
-        # relative, otherwise it is package relative.  Mimic that here.
-        inc = inc.lstrip("/").rstrip("/")
-        if inc == "." or inc == "":
-            return ""
-        else:
-            return inc + "/"
-    inc.rstrip("/")
-    if inc == ".":
-        return relative_path:
-    else:
-        return relative_path + inc + "/"
-
+load("@bazel_skylib//lib:paths.bzl", "paths")
 
 def nasm_assemble(
         *,
@@ -65,13 +50,16 @@ def nasm_assemble(
     # Generate the set of -I paths.
     # set() doesn't exist until recent starlark/bazel
     raw_includes = {}
-    raw_includes[workspace_root] = None
+    if workspace_root:
+      raw_includes[workspace_root] = None
     raw_includes[gen_root] = None
     for inc in includes:
-        # Add both the source and generated paths for each include
-        path = _construct_include(inc, relative_path)
-        raw_includes[workspace_root + path] = None
-        raw_includes[gen_root + path] = None
+        # When inc begins with "/" it is treated as a workspace-relative path, otherwise
+        # it is treated as a package-relative path. Joining with "/" ensures a trailing slash.
+        # Both source and generated include paths are constructed for each element.
+        path = paths.join(relative_path, inc).lstrip("/")
+        raw_includes[paths.join(workspace_root, path, "")] = None
+        raw_includes[paths.join(gen_root, path, "")] = None
 
     # The prior rules auto-added source-relative -I paths...
     # Typically bazel rules require includes to use relative paths
@@ -100,8 +88,8 @@ def nasm_assemble(
 
     return out
 
-_NASM_EXTENSIONS = [".asm", ".nasm", ".s", ".i"]
-_NASM_INCLUDES = _NASM_EXTENSIONS + [".inc", ".inc.h"]
+_NASM_EXTENSIONS = [".asm", ".nasm", ".s"]
+_NASM_INCLUDES = _NASM_EXTENSIONS + [".i", ".inc", ".inc.h"]
 
 NASM_ATTRS = {
     "copts": attr.string_list(
@@ -117,7 +105,8 @@ NASM_ATTRS = {
         ),
     ),
     "includes": attr.string_list(
-        doc = ("Directories which will be added to the search path for include files."),
+        doc = ("Directories which will be added to the search path for include files." +
+               "Directories beginning with / are workspace-relative, otherwise they are package-relative."),
     ),
     "preincs": attr.label_list(
         allow_files = _NASM_INCLUDES,

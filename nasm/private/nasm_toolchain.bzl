@@ -30,13 +30,14 @@ A toolchain can be defined by adding a snippet like the following
 somewhere in a `BUILD.bazel` file within your workspace.
 
 ```python
-load("@rules_nasm//nasm:defs.bzl", "nasm_toolchain")
+load("@rules_nasm//nasm:nasm_toolchain.bzl", "nasm_toolchain")
 
 nasm_toolchain(
     name = "nasm_toolchain",
     copts = select({
-        "//nasm:elf64": ["-felf64"],
-        "//nasm:macho64": ["-fmacho64"],
+        "@rules_nasm//nasm/toolchain:elf64": ["-felf64"],
+        "@rules_nasm//nasm/toolchain:win64": ["-fwin64"],
+        "@rules_nasm//nasm/toolchain:macho64": ["-fmacho64"],
         "//conditions:default": [],
     }),
     nasm = "@nasm",
