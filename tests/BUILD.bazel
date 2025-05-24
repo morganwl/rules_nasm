@@ -79,3 +79,11 @@ nasm_cc_test(
     hdrs = ["includes/includes_inc.asm"],
     includes = ["includes"],
 )
+
+nasm_cc_test(
+    name = "includes_path_test_root",
+    size = "small",
+    srcs = ["includes_main.asm"],
+    hdrs = ["includes/includes_inc.asm"],
+    includes = ["/tests/includes"],
+)
