@@ -13,12 +13,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - uses: bazel-contrib/setup-bazel@0.15.0
+        with:
+          disk-cache: true
+          bazelisk-cache: true
+          repository-cache: true
       - name: Run tests
         run: bazel
           --bazelrc=${{ github.workspace }}/.github/ci.bazelrc
           run
           --compilation_mode=opt --stamp
-          --remote_header=x-buildbuddy-api-key=${{ secrets.BUILDBUDDY_API_KEY }}
           //docs:publish_book
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.7

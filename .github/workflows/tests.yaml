@@ -11,35 +11,33 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, macos-13, "windows-2022"]
-        bazel_version: [7.3.2, latest]
+        os: [ubuntu-24.04, macos-13, windows-2022]
+        bazel_version: [7.x, 8.x, latest]
     runs-on: ${{ matrix.os }}
     permissions:
       contents: 'read'
       packages: 'read'
       id-token: 'write'
     steps:
-      - uses: bazel-contrib/setup-bazel@0.14.0
+      - uses: bazel-contrib/setup-bazel@0.15.0
         with:
+          disk-cache: true
           bazelisk-cache: true
+          repository-cache: true
       - uses: actions/checkout@v4
       - name: Unit tests
         env:
           USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
-          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
         run:
           bazel
           --bazelrc=${{ github.workspace }}/.github/ci.bazelrc
           test //...
-          --remote_header=x-buildbuddy-api-key=${{ secrets.BUILDBUDDY_API_KEY }}
       - name: e2e tests
         env:
           USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
-          BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
         run:
           e2e/test.sh
           --bazelrc=${{ github.workspace }}/.github/ci.bazelrc
-          --remote_header=x-buildbuddy-api-key=${{ secrets.BUILDBUDDY_API_KEY }}
 
   formatting:
     runs-on: ubuntu-latest
