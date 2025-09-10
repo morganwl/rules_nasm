@@ -10,5 +10,8 @@ bzl_library(
     name = "cc_rules",
     srcs = ["cc_rules.bzl"],
     visibility = ["//:__subpackages__"],
-    deps = ["//nasm/private/rules:library"],
+    deps = [
+        "//nasm/private/rules:library",
+        "@rules_cc//cc:core_rules",
+    ],
 )
