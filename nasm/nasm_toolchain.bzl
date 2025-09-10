@@ -3,5 +3,4 @@ load(
     _nasm_toolchain = "nasm_toolchain",
 )
 
-def nasm_toolchain(**kwargs):
-    _nasm_toolchain(**kwargs)
+nasm_toolchain = _nasm_toolchain
