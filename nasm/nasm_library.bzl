@@ -3,5 +3,4 @@ load(
     _nasm_library = "nasm_library",
 )
 
-def nasm_library(**kwargs):
-    _nasm_library(**kwargs)
+nasm_library = _nasm_library

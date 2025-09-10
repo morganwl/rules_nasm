@@ -3,5 +3,4 @@ load(
     _nasm_cc_binary = "nasm_cc_binary",
 )
 
-def nasm_cc_binary(**kwargs):
-    _nasm_cc_binary(**kwargs)
+nasm_cc_binary = _nasm_cc_binary

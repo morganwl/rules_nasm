@@ -3,5 +3,4 @@ load(
     _nasm_cc_test = "nasm_cc_test",
 )
 
-def nasm_cc_test(**kwargs):
-    _nasm_cc_test(**kwargs)
+nasm_cc_test = _nasm_cc_test

@@ -31,8 +31,10 @@ def nasm_assemble(
     if nasm_toolchain.compiler.basename.endswith(".exe"):
         suffix = ".obj"
 
+    # A single .asm file could be compiled by multiple targets, so construct
+    # the output name as _obj/path/to/target/basename.obj
     out_name = paths.join("_obj", ctx.label.package, ctx.label.name, src.basename + suffix)
-    out = ctx.actions.declare_file(paths.normalize(out_name))
+    out = ctx.actions.declare_file(out_name)
 
     workspace_root = src.owner.workspace_root
     if workspace_root:
@@ -87,7 +89,7 @@ def nasm_assemble(
     return out
 
 _NASM_EXTENSIONS = [".asm", ".nasm", ".s"]
-_NASM_INCLUDES = _NASM_EXTENSIONS + [".i", ".inc", ".inc.h"]
+_NASM_INCLUDES = _NASM_EXTENSIONS + [".i", ".inc"]
 
 NASM_ATTRS = {
     "copts": attr.string_list(
@@ -104,7 +106,8 @@ NASM_ATTRS = {
     ),
     "includes": attr.string_list(
         doc = ("Directories which will be added to the search path for include files." +
-               "Directories beginning with / are workspace-relative, otherwise they are package-relative."),
+               "Entries beginning with '/' are workspace-relative directories, otherwise " +
+               "they are package-relative directories."),
     ),
     "preincs": attr.label_list(
         allow_files = _NASM_INCLUDES,
