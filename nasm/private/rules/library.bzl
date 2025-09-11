@@ -33,7 +33,7 @@ def nasm_assemble(
 
     # A single .asm file could be compiled by multiple targets, so construct
     # the output name as _obj/path/to/target/basename.obj
-    out_name = paths.join("_obj", ctx.label.package, ctx.label.name, src.basename + suffix)
+    out_name = paths.join("_obj", ctx.label.name, src.basename + suffix)
     out = ctx.actions.declare_file(out_name)
 
     workspace_root = src.owner.workspace_root
@@ -52,9 +52,8 @@ def nasm_assemble(
         raw_includes[workspace_root] = None
     raw_includes[gen_root] = None
     for inc in includes:
-        # When inc begins with "/" it is treated as a workspace-relative path, otherwise
-        # it is treated as a package-relative path. Joining with "/" ensures a trailing slash.
-        # Both source and generated include paths are constructed for each element.
+        if inc.startswith('/'):
+            continue
         path = paths.join(relative_path, inc).lstrip("/")
         raw_includes[paths.join(workspace_root, path, "")] = None
         raw_includes[paths.join(gen_root, path, "")] = None
@@ -105,9 +104,7 @@ NASM_ATTRS = {
         ),
     ),
     "includes": attr.string_list(
-        doc = ("Directories which will be added to the search path for include files." +
-               "Entries beginning with '/' are workspace-relative directories, otherwise " +
-               "they are package-relative directories."),
+        doc = ("Directories which will be added to the search path for include files."),
     ),
     "preincs": attr.label_list(
         allow_files = _NASM_INCLUDES,
