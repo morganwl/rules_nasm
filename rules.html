@@ -180,11 +180,11 @@ nasm_library(<a href="#nasm_library-name">name</a>, <a href="#nasm_library-srcs"
 <p><strong>ATTRIBUTES</strong></p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Name</th><th style="text-align: left">Description</th><th style="text-align: left">Type</th><th style="text-align: left">Mandatory</th><th style="text-align: left">Default</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a id="nasm_library-name"></a>name</td><td style="text-align: left">A unique name for this target.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels#target-names">Name</a></td><td style="text-align: left">required</td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left"><a id="nasm_library-srcs"></a>srcs</td><td style="text-align: left">The assembly source file. Must have an extension of .asm, .nasm, .s, .i.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels">List of labels</a></td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
-<tr><td style="text-align: left"><a id="nasm_library-hdrs"></a>hdrs</td><td style="text-align: left">Other assembly sources which may be included by <code>src</code>. Must have an extension of .asm, .nasm, .s, .i.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels">List of labels</a></td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
+<tr><td style="text-align: left"><a id="nasm_library-srcs"></a>srcs</td><td style="text-align: left">The assembly source file. Must have an extension of .asm, .nasm, .s.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels">List of labels</a></td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
+<tr><td style="text-align: left"><a id="nasm_library-hdrs"></a>hdrs</td><td style="text-align: left">Other assembly sources which may be included by <code>src</code>. Must have an extension of .asm, .nasm, .s, .i, .inc.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels">List of labels</a></td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
 <tr><td style="text-align: left"><a id="nasm_library-copts"></a>copts</td><td style="text-align: left">Additional compilation flags to <code>nasm</code>.</td><td style="text-align: left">List of strings</td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
 <tr><td style="text-align: left"><a id="nasm_library-includes"></a>includes</td><td style="text-align: left">Directories which will be added to the search path for include files.</td><td style="text-align: left">List of strings</td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
-<tr><td style="text-align: left"><a id="nasm_library-preincs"></a>preincs</td><td style="text-align: left">Assembly sources which will be included and processed before the source file. Sources will be included in the order listed. Must have an extension of .asm, .nasm, .s, .i.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels">List of labels</a></td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
+<tr><td style="text-align: left"><a id="nasm_library-preincs"></a>preincs</td><td style="text-align: left">Assembly sources which will be included and processed before the source file. Sources will be included in the order listed. Must have an extension of .asm, .nasm, .s, .i, .inc.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels">List of labels</a></td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
 </tbody></table>
 </div>
 <p><a id="nasm_toolchain"></a></p>
@@ -197,13 +197,14 @@ nasm_toolchain(<a href="#nasm_toolchain-name">name</a>, <a href="#nasm_toolchain
 <p>A toolchain for configuring <code>nasm</code> rules.</p>
 <p>A toolchain can be defined by adding a snippet like the following
 somewhere in a <code>BUILD.bazel</code> file within your workspace.</p>
-<pre><code class="language-python">load("@rules_nasm//nasm:defs.bzl", "nasm_toolchain")
+<pre><code class="language-python">load("@rules_nasm//nasm:nasm_toolchain.bzl", "nasm_toolchain")
 
 nasm_toolchain(
     name = "nasm_toolchain",
     copts = select({
-        "//nasm:elf64": ["-felf64"],
-        "//nasm:macho64": ["-fmacho64"],
+        "@rules_nasm//nasm/toolchain:elf64": ["-felf64"],
+        "@rules_nasm//nasm/toolchain:win64": ["-fwin64"],
+        "@rules_nasm//nasm/toolchain:macho64": ["-fmacho64"],
         "//conditions:default": [],
     }),
     nasm = "@nasm",
@@ -218,13 +219,13 @@ toolchain(
 )
 </code></pre>
 <p>Once the toolchain is defined, it will need to be registered in the <code>MODULE.bazel</code> file.</p>
-<pre><code class="language-python">register_toolchains("//:nasm_toolchain")
+<pre><code class="language-python">register_toolchains("//:toolchain")
 </code></pre>
 <p><strong>ATTRIBUTES</strong></p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Name</th><th style="text-align: left">Description</th><th style="text-align: left">Type</th><th style="text-align: left">Mandatory</th><th style="text-align: left">Default</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a id="nasm_toolchain-name"></a>name</td><td style="text-align: left">A unique name for this target.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels#target-names">Name</a></td><td style="text-align: left">required</td><td style="text-align: left"></td></tr>
 <tr><td style="text-align: left"><a id="nasm_toolchain-copts"></a>copts</td><td style="text-align: left">Default arguments to pass to the <code>nasm</code> executable.</td><td style="text-align: left">List of strings</td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
-<tr><td style="text-align: left"><a id="nasm_toolchain-nasm"></a>nasm</td><td style="text-align: left">The <code>nasm</code> executable.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels">Label</a></td><td style="text-align: left">optional</td><td style="text-align: left"><code>None</code></td></tr>
+<tr><td style="text-align: left"><a id="nasm_toolchain-nasm"></a>nasm</td><td style="text-align: left">The <code>nasm</code> executable.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels">Label</a></td><td style="text-align: left">required</td><td style="text-align: left"></td></tr>
 </tbody></table>
 </div>
 <p><a id="nasm_cc_binary"></a></p>
