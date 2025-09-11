@@ -52,7 +52,7 @@ def nasm_assemble(
         raw_includes[workspace_root] = None
     raw_includes[gen_root] = None
     for inc in includes:
-        if inc.startswith('/'):
+        if inc.startswith("/"):
             continue
         path = paths.join(relative_path, inc).lstrip("/")
         raw_includes[paths.join(workspace_root, path, "")] = None
