@@ -13,6 +13,7 @@ def nasm_cc_rule(
         name,
         srcs,
         hdrs = None,
+        copts = None,
         preincs = None,
         includes = None,
         **kwargs):
@@ -23,13 +24,16 @@ def nasm_cc_rule(
         name: A unique name for this target.
         srcs: The assembly source files.
         hdrs: Other assembly sources which may be included by `srcs`.
+        copts: Additional compilation flags to `nasm`.
         preincs: Assembly sources which will be included and processed before the source file.
                Sources will be included in the order listed.
         includes: Directories which will be added to the search path for include files.
         **kwargs: Additional keyword arguments passed to the `cc_library` rule.
     """
-    tags = kwargs.pop("tags", [])
+    if copts == None:
+        copts = []
 
+    tags = kwargs.pop("tags", [])
     nasm_args = {}
     for arg in [
         "compatible_with",
@@ -46,6 +50,7 @@ def nasm_cc_rule(
         hdrs = hdrs,
         preincs = preincs,
         includes = includes,
+        copts = copts,
         tags = depset(tags + ["manual"]).to_list(),
         visibility = ["//visibility:private"],
         **nasm_args

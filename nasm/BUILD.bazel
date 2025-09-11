@@ -6,6 +6,26 @@ toolchain_type(
     visibility = ["//visibility:public"],
 )
 
+current_nasm_assembler(
+    name = "current_nasm_assembler",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "assembler",
+    actual = ":current_nasm_assembler",
+    visibility = ["//visibility:public"],
+)
+
+exports_files([
+    "defs.bzl",
+    "nasm_cc_binary.bzl",
+    "nasm_cc_library.bzl",
+    "nasm_cc_test.bzl",
+    "nasm_library.bzl",
+    "nasm_toolchain.bzl",
+])
+
 bzl_library(
     name = "defs",
     srcs = ["defs.bzl"],
@@ -16,17 +36,47 @@ bzl_library(
     ],
 )
 
-exports_files([
-    "defs.bzl",
-])
-
-current_nasm_assembler(
-    name = "current_nasm_assembler",
+bzl_library(
+    name = "nasm_cc_binary",
+    srcs = ["nasm_cc_binary.bzl"],
     visibility = ["//visibility:public"],
+    deps = [
+        "//nasm/private:cc_rules",
+    ],
 )
 
-alias(
-    name = "assembler",
-    actual = ":current_nasm_assembler",
+bzl_library(
+    name = "nasm_cc_library",
+    srcs = ["nasm_cc_library.bzl"],
     visibility = ["//visibility:public"],
+    deps = [
+        "//nasm/private:cc_rules",
+    ],
+)
+
+bzl_library(
+    name = "nasm_cc_test",
+    srcs = ["nasm_cc_test.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//nasm/private:cc_rules",
+    ],
+)
+
+bzl_library(
+    name = "nasm_library",
+    srcs = ["nasm_library.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//nasm/private/rules:library",
+    ],
+)
+
+bzl_library(
+    name = "nasm_toolchain",
+    srcs = ["nasm_toolchain.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//nasm/private:nasm_toolchain",
+    ],
 )

@@ -2,6 +2,8 @@
 
 """Rules for assembling object files."""
 
+load("@bazel_skylib//lib:paths.bzl", "paths")
+
 def nasm_assemble(
         *,
         ctx,
@@ -25,35 +27,50 @@ def nasm_assemble(
     Returns:
         File: The compiled object file.
     """
-    basename, _, _ = src.basename.rpartition(".")
-    out = ctx.actions.declare_file("{}/_obj/{}/{}.o".format(
-        ctx.label.package,
-        ctx.label.name,
-        basename,
-    ))
+    suffix = ".o"
+    if nasm_toolchain.compiler.basename.endswith(".exe"):
+        suffix = ".obj"
+
+    # A single .asm file could be compiled by multiple targets, so construct
+    # the output name as _obj/path/to/target/basename.obj
+    out_name = paths.join("_obj", ctx.label.name, src.basename + suffix)
+    out = ctx.actions.declare_file(out_name)
 
     workspace_root = src.owner.workspace_root
     if workspace_root:
         workspace_root = workspace_root + "/"
-    package_path = workspace_root + src.owner.package
+    gen_root = ctx.genfiles_dir.path + "/" + workspace_root
 
+    relative_path = ""
+    if src.owner.package:
+        relative_path = src.owner.package + "/"
+
+    # Generate the set of -I paths.
+    # set() doesn't exist until recent starlark/bazel
+    raw_includes = {}
+    if workspace_root:
+        raw_includes[workspace_root] = None
+    raw_includes[gen_root] = None
+    for inc in includes:
+        if inc.startswith("/"):
+            continue
+        path = paths.join(relative_path, inc).lstrip("/")
+        raw_includes[paths.join(workspace_root, path, "")] = None
+        raw_includes[paths.join(gen_root, path, "")] = None
+
+    # The prior rules auto-added source-relative -I paths...
+    # Typically bazel rules assume includes use workspace-relative paths, so
+    # this should be removed and includes = ["."] should be added to the rules
+    # which depend on having import "foo.i" read from the current directory.
+    raw_includes[src.dirname + "/"] = None
+
+    # Generate the actual args.
     args = ctx.actions.args()
     args.add_all(nasm_toolchain.copts)
-    args.add("-I", src.dirname + "/")
-
-    if workspace_root:
-        args.add("-I", workspace_root)
-
-    args.add_all(
-        [
-            "%s/%s" % (package_path, inc)
-            for inc in includes
-        ],
-        before_each = "-I",
-    )
-    args.add("-o", out)
+    args.add_all(raw_includes.keys(), before_each = "-I")
     args.add_all(preincs, before_each = "-p")
     args.add_all(copts)
+    args.add("-o", out)
     args.add(src)
 
     inputs = depset([src] + preincs, transitive = [hdrs])
@@ -69,18 +86,19 @@ def nasm_assemble(
 
     return out
 
-_NASM_EXTENSIONS = [".asm", ".nasm", ".s", ".i"]
+_NASM_EXTENSIONS = [".asm", ".nasm", ".s"]
+_NASM_INCLUDES = _NASM_EXTENSIONS + [".i", ".inc"]
 
 NASM_ATTRS = {
     "copts": attr.string_list(
         doc = "Additional compilation flags to `nasm`.",
     ),
     "hdrs": attr.label_list(
-        allow_files = _NASM_EXTENSIONS,
+        allow_files = _NASM_INCLUDES,
         doc = (
             "Other assembly sources which may be included by `src`. " +
             "Must have an extension of %s." % (
-                ", ".join(_NASM_EXTENSIONS)
+                ", ".join(_NASM_INCLUDES)
             )
         ),
     ),
@@ -88,11 +106,11 @@ NASM_ATTRS = {
         doc = ("Directories which will be added to the search path for include files."),
     ),
     "preincs": attr.label_list(
-        allow_files = _NASM_EXTENSIONS,
+        allow_files = _NASM_INCLUDES,
         doc = (
             "Assembly sources which will be included and processed before the source file. " +
             "Sources will be included in the order listed. Must have an extension of %s." % (
-                ", ".join(_NASM_EXTENSIONS)
+                ", ".join(_NASM_INCLUDES)
             )
         ),
     ),
