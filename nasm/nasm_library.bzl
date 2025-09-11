@@ -1,3 +1,5 @@
+"""nasm_library"""
+
 load(
     "//nasm/private/rules:library.bzl",
     _nasm_library = "nasm_library",

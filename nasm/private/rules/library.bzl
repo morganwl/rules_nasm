@@ -82,7 +82,6 @@ def nasm_assemble(
         inputs = inputs,
         outputs = [out],
         tools = nasm_toolchain.all_files,
-        use_default_shell_env = True,
     )
 
     return out
