@@ -3,6 +3,51 @@
 """Rules for assembling object files."""
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@rules_cc//cc:action_names.bzl", "ACTION_NAMES")
+load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cpp_toolchain")
+load("@rules_cc//cc/common:cc_common.bzl", "cc_common")
+
+def get_environment_variables(ctx, cc_toolchain):
+    """Get environment variables for running autoconf checks.
+
+    Args:
+        ctx (ctx): The rule context.
+        cc_toolchain (cc_toolchain): The cc_toolchain to query.
+
+    Returns:
+        A dictionary of environment variables.
+    """
+    feature_configuration = cc_common.configure_features(
+        ctx = ctx,
+        cc_toolchain = cc_toolchain,
+        requested_features = ctx.features,
+        unsupported_features = ctx.disabled_features,
+    )
+    compile_variables_for_env = cc_common.create_compile_variables(
+        feature_configuration = feature_configuration,
+        cc_toolchain = cc_toolchain,
+        user_compile_flags = ctx.fragments.cpp.copts + ctx.fragments.cpp.cxxopts,
+    )
+    compile_env = cc_common.get_environment_variables(
+        feature_configuration = feature_configuration,
+        action_name = ACTION_NAMES.c_compile,
+        variables = compile_variables_for_env,
+    )
+    link_variables_for_env = cc_common.create_link_variables(
+        feature_configuration = feature_configuration,
+        cc_toolchain = cc_toolchain,
+        is_linking_dynamic_library = False,
+        is_static_linking_mode = True,
+    )
+    link_env = cc_common.get_environment_variables(
+        feature_configuration = feature_configuration,
+        action_name = ACTION_NAMES.cpp_link_executable,
+        variables = link_variables_for_env,
+    )
+
+    # Merge compile and link environment variables, with compile taking precedence
+    # since it has the critical INCLUDE paths for MSVC
+    return link_env | compile_env
 
 def nasm_assemble(
         *,
@@ -75,6 +120,13 @@ def nasm_assemble(
 
     inputs = depset([src] + preincs, transitive = [hdrs])
 
+    env = {}
+
+    # Add any environment variables available from a configured CC toolchain.
+    cc_toolchain = find_cpp_toolchain(ctx)
+    if cc_toolchain:
+        env.update(get_environment_variables(ctx, cc_toolchain))
+
     ctx.actions.run(
         mnemonic = "NasmAssemble",
         executable = nasm_toolchain.nasm,
@@ -82,6 +134,8 @@ def nasm_assemble(
         inputs = inputs,
         outputs = [out],
         tools = nasm_toolchain.all_files,
+        env = env | ctx.configuration.default_shell_env,
+        toolchain = Label("//nasm:toolchain_type"),
     )
 
     return out
@@ -150,5 +204,9 @@ nasm_library = rule(
     implementation = _nasm_library_impl,
     doc = "Assemble an `nasm` source for use as a C++ dependency.",
     attrs = NASM_ATTRS,
-    toolchains = ["//nasm:toolchain_type"],
+    toolchains = [
+        "//nasm:toolchain_type",
+        config_common.toolchain_type("@rules_cc//cc:toolchain_type", mandatory = False),
+    ],
+    fragments = ["cpp"],
 )
