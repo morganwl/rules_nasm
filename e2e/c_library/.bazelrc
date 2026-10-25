@@ -1,0 +1,2 @@
+# Keep flags in sync with the root module.
+try-import %workspace%/../../.bazelrc

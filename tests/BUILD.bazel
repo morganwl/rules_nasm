@@ -1,5 +1,6 @@
 # Copyright (c) 2024 Morgan Wajda-Levie.
 
+load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
 load("@bazel_skylib//rules:native_binary.bzl", "native_test")
 load("@rules_cc//cc:cc_test.bzl", "cc_test")
 load("@rules_nasm//nasm:defs.bzl", "nasm_cc_binary", "nasm_cc_library", "nasm_cc_test")
@@ -107,4 +108,44 @@ nasm_cc_test(
         "@platforms//cpu:aarch64": ["@platforms//:incompatible"],
         "//conditions:default": [],
     }),
+)
+
+# Generated sources and headers exercise include paths within the output tree.
+copy_file(
+    name = "generated_main",
+    src = "includes_main.asm",
+    out = "generated/includes_main.asm",
+)
+
+copy_file(
+    name = "generated_inc",
+    src = "includes_inc.asm",
+    out = "generated/includes/includes_inc.asm",
+)
+
+nasm_cc_test(
+    name = "generated_includes_path_test",
+    size = "small",
+    srcs = [":generated_main"],
+    hdrs = [":generated_inc"],
+    includes = ["generated/includes"],
+)
+
+copy_file(
+    name = "generated_sibling_main",
+    src = "includes_main.asm",
+    out = "generated/sibling/includes_main.asm",
+)
+
+copy_file(
+    name = "generated_sibling_inc",
+    src = "includes_inc.asm",
+    out = "generated/sibling/includes_inc.asm",
+)
+
+nasm_cc_test(
+    name = "generated_sibling_includes_test",
+    size = "small",
+    srcs = [":generated_sibling_main"],
+    hdrs = [":generated_sibling_inc"],
 )

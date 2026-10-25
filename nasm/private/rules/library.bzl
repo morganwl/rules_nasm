@@ -4,7 +4,7 @@
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@rules_cc//cc:action_names.bzl", "ACTION_NAMES")
-load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cpp_toolchain")
+load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain", "use_cc_toolchain")
 load("@rules_cc//cc/common:cc_common.bzl", "cc_common")
 
 def get_environment_variables(ctx, cc_toolchain):
@@ -49,6 +49,31 @@ def get_environment_variables(ctx, cc_toolchain):
     # since it has the critical INCLUDE paths for MSVC
     return link_env | compile_env
 
+def _include_dir(include):
+    """Render an include directory for a `NasmAssemble` command line.
+
+    This is an `Args.add_all` `map_each` callback. Directories within the output
+    tree are derived from the path of a `File` in that tree instead of from
+    `ctx.bin_dir.path` so they remain correct under path mapping
+    (`--experimental_output_paths=strip`), where `File.path` is rewritten at the
+    time the command line is expanded.
+
+    Args:
+        include (struct): A struct with the fields `anchor` (`File` or `None`),
+            `strip` (`int`) and `path` (`str`). When `anchor` is `None`, `path`
+            is used as is. Otherwise `strip` characters are removed from the end
+            of `anchor.path` and `path` is appended to the result.
+
+    Returns:
+        str: The include directory.
+    """
+    if include.anchor == None:
+        path = include.path
+    else:
+        anchor = include.anchor.path
+        path = anchor[:len(anchor) - include.strip] + include.path
+    return path or "./"
+
 def nasm_assemble(
         *,
         ctx,
@@ -81,38 +106,47 @@ def nasm_assemble(
     out_name = paths.join("_obj", ctx.label.name, src.basename + suffix)
     out = ctx.actions.declare_file(out_name)
 
+    # `out.path` is `<out.root.path>/<repo relative path>`. Include directories
+    # in the output tree are produced by stripping the repo relative path from
+    # `out.path` within the `_include_dir` callback, which sees the path-mapped
+    # `out.path`.
+    bin_strip = len(out.path) - len(out.root.path) - 1
+
     workspace_root = src.owner.workspace_root
     if workspace_root:
         workspace_root = workspace_root + "/"
-    gen_root = ctx.genfiles_dir.path + "/" + workspace_root
 
     relative_path = ""
     if src.owner.package:
         relative_path = src.owner.package + "/"
 
-    # Generate the set of -I paths.
-    # set() doesn't exist until recent starlark/bazel
-    raw_includes = {}
+    # Generate the set of -I paths. Each is looked up in both the source tree
+    # and the output tree. The dict drops duplicates while preserving order.
+    include_dirs = {}
     if workspace_root:
-        raw_includes[workspace_root] = None
-    raw_includes[gen_root] = None
+        include_dirs["src:" + workspace_root] = struct(anchor = None, strip = 0, path = workspace_root)
+    include_dirs["out:" + workspace_root] = struct(anchor = out, strip = bin_strip, path = workspace_root)
     for inc in includes:
         if inc.startswith("/"):
             continue
-        path = paths.join(relative_path, inc).lstrip("/")
-        raw_includes[paths.join(workspace_root, path, "")] = None
-        raw_includes[paths.join(gen_root, path, "")] = None
+        path = paths.join(workspace_root, paths.join(relative_path, inc).lstrip("/"), "")
+        include_dirs["src:" + path] = struct(anchor = None, strip = 0, path = path)
+        include_dirs["out:" + path] = struct(anchor = out, strip = bin_strip, path = path)
 
     # The prior rules auto-added source-relative -I paths...
     # Typically bazel rules assume includes use workspace-relative paths, so
     # this should be removed and includes = ["."] should be added to the rules
     # which depend on having import "foo.i" read from the current directory.
-    raw_includes[src.dirname + "/"] = None
+    if src.is_source:
+        src_dir = src.path[:-len(src.basename)]
+        include_dirs["src:" + src_dir] = struct(anchor = None, strip = 0, path = src_dir)
+    else:
+        include_dirs["dir:" + src.path] = struct(anchor = src, strip = len(src.basename), path = "")
 
     # Generate the actual args.
     args = ctx.actions.args()
     args.add_all(nasm_toolchain.copts)
-    args.add_all(raw_includes.keys(), before_each = "-I")
+    args.add_all(include_dirs.values(), map_each = _include_dir, before_each = "-I")
     args.add_all(preincs, before_each = "-p")
     args.add_all(copts)
     args.add("-o", out)
@@ -123,7 +157,7 @@ def nasm_assemble(
     env = {}
 
     # Add any environment variables available from a configured CC toolchain.
-    cc_toolchain = find_cpp_toolchain(ctx)
+    cc_toolchain = find_cc_toolchain(ctx, mandatory = False)
     if cc_toolchain:
         env.update(get_environment_variables(ctx, cc_toolchain))
 
@@ -135,6 +169,11 @@ def nasm_assemble(
         outputs = [out],
         tools = nasm_toolchain.all_files,
         env = env | ctx.configuration.default_shell_env,
+        # All paths generated by this rule are derived from `File` objects when
+        # the command line is expanded, so this action supports path mapping.
+        # User provided `copts` and the toolchain environment are passed through
+        # verbatim and must not contain configuration specific output paths.
+        execution_requirements = {"supports-path-mapping": "1"},
         toolchain = Label("//nasm:toolchain_type"),
     )
 
@@ -204,9 +243,6 @@ nasm_library = rule(
     implementation = _nasm_library_impl,
     doc = "Assemble an `nasm` source for use as a C++ dependency.",
     attrs = NASM_ATTRS,
-    toolchains = [
-        "//nasm:toolchain_type",
-        config_common.toolchain_type("@rules_cc//cc:toolchain_type", mandatory = False),
-    ],
+    toolchains = ["//nasm:toolchain_type"] + use_cc_toolchain(mandatory = False),
     fragments = ["cpp"],
 )

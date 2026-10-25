@@ -2,8 +2,21 @@
 
 test --test_output=errors
 
+# https://github.com/bazelbuild/bazel/issues/19981
+common --incompatible_auto_exec_groups
+
 # https://github.com/bazelbuild/bazel/issues/8195
-build --incompatible_disallow_empty_glob=true
+common --incompatible_disallow_empty_glob=true
 
 # https://github.com/bazelbuild/bazel/issues/12821
 build --nolegacy_external_runfiles
+
+# https://github.com/bazelbuild/bazel/issues/23043
+common --incompatible_autoload_externally=
+
+# https://github.com/bazelbuild/bazel/issues/12933
+build --incompatible_config_setting_private_default_visibility
+
+# Path mapping
+# https://github.com/bazelbuild/bazel/issues/6526
+build:path_mapping --experimental_output_paths=strip
